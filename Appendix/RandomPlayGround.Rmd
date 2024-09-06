@@ -1,0 +1,20 @@
+---
+title: "Time Series Project Playground"
+author: "Jacob Clinton"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+** Linear Interpolation and Spline Interpolation **
+
+** Kalman filter **
+
+** Multiple Imputation **
+
+** Gaussian Process **
+
+
