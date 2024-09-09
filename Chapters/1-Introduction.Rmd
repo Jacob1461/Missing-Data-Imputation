@@ -1,0 +1,9 @@
+# Introduction
+
+(Probably work on this section last)  
+
+## What is missing data
+
+## Issues caused by missing data
+
+## Structure of the report

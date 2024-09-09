@@ -1,0 +1,126 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{report}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Time Series Project},
+  pdfauthor={Jacob Clinton George Smith-Kolff},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Time Series Project}
+\author{Jacob Clinton George Smith-Kolff}
+\date{2024-09-09}
+
+\begin{document}
+\maketitle
+
+{
+\setcounter{tocdepth}{1}
+\tableofcontents
+}
+\chapter{Introduction}\label{introduction}
+
+(Probably work on this section last)
+
+\section{What is missing data}\label{what-is-missing-data}
+
+\section{Issues caused by missing
+data}\label{issues-caused-by-missing-data}
+
+\section{Structure of the report}\label{structure-of-the-report}
+
+\chapter{Theory}\label{theory}
+
+(Formal definitions and proper explanations for what things are and how
+they work)
+
+\section{Time series}\label{time-series}
+
+\section{Missing data}\label{missing-data}
+
+\section{Methods to deal with missing
+data}\label{methods-to-deal-with-missing-data}
+
+\subsection{Linear interpolation}\label{linear-interpolation}
+
+\subsection{Kalman filter}\label{kalman-filter}
+
+\subsection{Gaussian Process}\label{gaussian-process}
+
+\subsection{Bayesian Structural Time
+Series}\label{bayesian-structural-time-series}
+
+\subsection{Deep Learning Models}\label{deep-learning-models}
+
+\chapter{Illustration of the method
+application}\label{illustration-of-the-method-application}
+
+Using the methods of missing data in practice.
+
+\section{The data}\label{the-data}
+
+\section{The methods}\label{the-methods}
+
+\chapter{Conclusion}\label{conclusion}
+
+\chapter{Appendix}\label{appendix}
+
+\end{document}

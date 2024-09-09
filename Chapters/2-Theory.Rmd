@@ -1,0 +1,21 @@
+# Theory
+
+(Formal definitions and proper explanations for what things are and how they work)  
+
+## Time series
+
+## Missing data
+
+## Methods to deal with missing data
+
+### Linear interpolation
+
+### Kalman filter
+
+### Gaussian Process
+
+### Bayesian Structural Time Series
+
+### Deep Learning Models
+
+

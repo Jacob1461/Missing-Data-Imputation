@@ -1,0 +1,7 @@
+# Illustration of the method application 
+
+Using the methods of missing data in practice.  
+
+## The data 
+
+## The methods

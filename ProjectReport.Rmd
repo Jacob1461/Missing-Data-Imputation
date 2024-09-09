@@ -1,0 +1,43 @@
+---
+title: "Time Series Project"
+author: "Jacob Clinton George Smith-Kolff"
+date: "`r Sys.Date()`"
+output: 
+  pdf_document:
+    toc: true
+    number_sections: true
+    fig_caption: true
+    keep_tex: true
+documentclass: report
+bibliography: references.bib
+csl: ieee.csl
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(bookdown)
+```
+
+
+```{r child='Chapters/1-Introduction.Rmd'}
+```
+
+```{r child='Chapters/2-Theory.Rmd'}
+```
+
+```{r child='Chapters/3-Illustration.Rmd'}
+```
+
+```{r child='Chapters/4-Conclusion.Rmd'}
+```
+
+```{r child='Chapters/5-Appendix.Rmd'}
+```
+
+
+
+
+
+
+
+
