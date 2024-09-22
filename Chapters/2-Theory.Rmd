@@ -1,21 +1,57 @@
 # Theory
 
-(Formal definitions and proper explanations for what things are and how they work)  
-
 ## Time series
 
+We begin by providing definitions for both uni variate and multivariate time series:  
+
+A univariate time series $X = \{x_1, x_2, ..., x_t\} \in \mathbb{R}^t$ is a sequence $t$ observations on a single variable.  
+This can be extended to multivariate time series:  
+$X = \{x_1, x_2, ..., x_t\}\in \mathbb{R}^{t\times d}$ where each $x_i$ is a $d$ dimensional vector.
+
+
 ## Missing data
+\todo[inline]{remove the subsubsection numbers later}
 
-## Methods to deal with missing data
+Data missingness is a common occurrence that is common in working with real world data. Missing data can arise from device failures such as measureing equipment failing, or from data censoring (such as from governments) [@little2019statistical]. Missing data typically falls into one of three categories:  
 
-### Linear interpolation
+### Missing Completely at Random (MCAR)
 
-### Kalman filter
+Data is said to be missing completely at random if the distribution that describes how missingness occurs is independent of both the observed and unobserved values in the time series. 
 
-### Gaussian Process
+### Missing at Random (MAR)
 
-### Bayesian Structural Time Series
+Missing at random is when missingness is related to the observed data, but is independent of the unobserved data. This means that there is some external factor that is causing the missingness. An example given in [@moritz2015comparison] is that data from a sensor is more likely to be missing on weekends since on some weekends the sensor is shutdown.
 
-### Deep Learning Models
+### Not Missing at Random (NMAR)
+
+Not missing at random means that the missingness is related to the value of the observation itself. An example of this is a sensor that will return a missing value if the recorded value is above 100$^\circ$.
+
+\todo{Come back and include probability notation}
+
+## Missing data imputation
+
+### Multivariate data imputation
+
+#### Multivariate data imputation techniques
+
+##### K-Nearest Neighbours
+
+##### Multivariate Imputation by Chained Equations (MICE)
+
+##### General Adversial Networks (GAM)
+
+### Univariate data imputation
+
+#### The struggle with univariate data imputation
+
+#### Last Observed Carried Forward (LOCF) Next Observation Carried Backward (NOCB)
+
+#### Mean/Median imputation
+
+#### Kalman filtering
+
+#### Linear Interpolation
+
+
 
 
