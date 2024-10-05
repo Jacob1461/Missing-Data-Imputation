@@ -101,7 +101,7 @@
 
 \title{Time Series Project}
 \author{Jacob Clinton George Smith-Kolff}
-\date{2024-09-22}
+\date{2024-10-06}
 
 \begin{document}
 \maketitle
@@ -124,6 +124,8 @@ data}\label{issues-caused-by-missing-data}
 \chapter{Theory}\label{theory}
 
 \section{Time series}\label{time-series}
+
+\textbf{Missing at random. This basically means that the missingness in the data is not imformative}
 
 We begin by providing definitions for both uni variate and multivariate
 time series:
@@ -170,18 +172,59 @@ return a missing value if the recorded value is above 100\(^\circ\).
 
 \section{Missing data imputation}\label{missing-data-imputation}
 
-\subsection{Multivariate data
-imputation}\label{multivariate-data-imputation}
+Most missing data imputation methods require MCAR or MAR, this is
+because these systems of missingness are not informative towards the
+missing values themselves. \todo[inline]{Can extend this writeup later.}
 
-\subsubsection{Multivariate data imputation
+\todo{Idea is to start with the most basic techniques, then more the more advanced ones}
+
+\subsection{Multivariate data imputation
 techniques}\label{multivariate-data-imputation-techniques}
 
-\paragraph{K-Nearest Neighbours}\label{k-nearest-neighbours}
+\subsubsection{Simple (naive?) methods}\label{simple-naive-methods}
 
-\paragraph{Multivariate Imputation by Chained Equations
+\begin{itemize}
+\item Mean/Median/Mode
+\item Forward/backward fill
+\item Linear interpolation
+\item MA
+\end{itemize}
+
+\subsubsection{K-nearest neighbours}\label{k-nearest-neighbours}
+
+K-Nearest neighbors is a simple non-parametric machine learning
+algorithm, it can be used for either classification or regression. It
+can be applied in a time series data imputation context to estimate
+missing values in a time series.
+
+\[\frac{1}{K}\sum_{j=1}^K Y_j\] Consider a missing value \(x_i\) in a
+time series, k-nearest neighbors will impute a value for the missing
+value by calculating the mean of the datapoints in the neighborhood
+determined by a distance metric such as Euclidean distance. The
+algorithm is simple and is shown to be quite effective {[}3{]}.
+K-nearest neighbors algorithm has a hyper-parameter K, the number of
+nearest (non missing) data points to consider. A choice of K that is too
+large may lead to smoothing over temporal patters (under fitting) this
+has the effect of ignoring potentially important seasonal patterns. On
+the other hand a value of K that is too small could lead to being overly
+sensitive to the noise. The value for K needs to be carefully chosen,
+typically by cross validation, but in a time series context it could be
+chosen using sliding windows and forward chaining. The curse of
+dimensionality is an issue for K-nearest neighbors. With higher
+dimension it becomes harder to find data points that are closer, this
+can lead to an increased sensitivity to noise and misleading
+imputations. The computational cost also increases rapidly with more
+dimensons in the data making the algorithm less efficient. Another issue
+related to computational cost, K-nearest neighbors is a lazy learning
+algorithm so the complete dataset ends up being stored for large
+datasets this can make the algorithm slow or even infeasible
+
+\todo{Come back to this section later}
+
+\subsubsection{Multivariate Imputation by Chained Equations
 (MICE)}\label{multivariate-imputation-by-chained-equations-mice}
 
-\paragraph{General Adversial Networks
+\subsubsection{General Adversial Networks
 (GAM)}\label{general-adversial-networks-gam}
 
 \subsection{Univariate data
@@ -190,15 +233,32 @@ imputation}\label{univariate-data-imputation}
 \subsubsection{The struggle with univariate data
 imputation}\label{the-struggle-with-univariate-data-imputation}
 
+Unlike with a multivariate time series, a univariate time series is only
+one sequence of observations \(\{y_1, y_2, ..., y_n\}\). This simplier
+form actually leads to increased difficulty when it comes to imputing a
+missing value of \(y\), since we can no longer exploit any dependencies
+between the predictor variables in the series. With univariate
+imputation we can only rely on the previous (or future) values for \(y\)
+along with the implicit time variable \footnote{moritz2015comparison}.
+
 \subsubsection{Last Observed Carried Forward (LOCF) Next Observation
 Carried Backward
 (NOCB)}\label{last-observed-carried-forward-locf-next-observation-carried-backward-nocb}
 
+\footnote{ahn2022comparison}
+
 \subsubsection{Mean/Median imputation}\label{meanmedian-imputation}
 
-\subsubsection{Kalman filtering}\label{kalman-filtering}
+\subsubsection{ARIMA-based Imputation}\label{arima-based-imputation}
 
-\subsubsection{Linear Interpolation}\label{linear-interpolation}
+Missing data can be imputed using an ARIMA model
+\[\left(1+ \sum_{i=1}^q \beta_i B^i\right)y(t)W(t)\] Where \(p\) is the
+AR part, \(d\) is the degree of differencing, \(q\) is order of the
+moving average part. In ARIMA based imputation the model will use the
+rest of the series to impute the missing value, if there are several
+missing values then each missing value is calculated one at a time and
+the model will use the previously imputed values as well as the data in
+the series to predict the next missing values \#\#\#\# Kalman filtering
 
 \chapter{Illustration of the method
 application}\label{illustration-of-the-method-application}
@@ -224,6 +284,13 @@ with missing data}, vol. 793. John Wiley \& Sons, 2019.}
 and J. Stork, {``Comparison of different methods for univariate time
 series imputation in r,''} \emph{arXiv preprint arXiv:1510.03924},
 2015.}
+
+\bibitem[\citeproctext]{ref-ahn2022comparison}
+\CSLLeftMargin{{[}3{]} }%
+\CSLRightInline{H. Ahn, K. Sun, K. P. Kim, \emph{et al.}, {``Comparison
+of missing data imputation methods in time series forecasting,''}
+\emph{Computers, Materials \& Continua}, vol. 70, no. 1, pp. 767--779,
+2022.}
 
 \end{CSLReferences}
 

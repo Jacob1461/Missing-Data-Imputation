@@ -356,6 +356,7 @@ display: none;
 <h1>Theory</h1>
 <div id="time-series" class="section level2">
 <h2>Time series</h2>
+<p></p>
 <p>We begin by providing definitions for both uni variate and
 multivariate time series:</p>
 <p>A univariate time series <span class="math inline">\(X = \{x_1, x_2,
@@ -396,41 +397,93 @@ will return a missing value if the recorded value is above 100<span class="math 
 </div>
 <div id="missing-data-imputation" class="section level2">
 <h2>Missing data imputation</h2>
-<div id="multivariate-data-imputation" class="section level3">
-<h3>Multivariate data imputation</h3>
-<div id="multivariate-data-imputation-techniques" class="section level4">
-<h4>Multivariate data imputation techniques</h4>
-<div id="k-nearest-neighbours" class="section level5">
-<h5>K-Nearest Neighbours</h5>
+<p>Most missing data imputation methods require MCAR or MAR, this is
+because these systems of missingness are not informative towards the
+missing values themselves. </p>
+<div id="multivariate-data-imputation-techniques" class="section level3">
+<h3>Multivariate data imputation techniques</h3>
+<div id="simple-naive-methods" class="section level4">
+<h4>Simple (naive?) methods</h4>
+
 </div>
-<div id="multivariate-imputation-by-chained-equations-mice" class="section level5">
-<h5>Multivariate Imputation by Chained Equations (MICE)</h5>
+<div id="k-nearest-neighbours" class="section level4">
+<h4>K-nearest neighbours</h4>
+<p>K-Nearest neighbors is a simple non-parametric machine learning
+algorithm, it can be used for either classification or regression. It
+can be applied in a time series data imputation context to estimate
+missing values in a time series.</p>
+<p><span class="math display">\[\frac{1}{K}\sum_{j=1}^K Y_j\]</span>
+Consider a missing value <span class="math inline">\(x_i\)</span> in a
+time series, k-nearest neighbors will impute a value for the missing
+value by calculating the mean of the datapoints in the neighborhood
+determined by a distance metric such as Euclidean distance. The
+algorithm is simple and is shown to be quite effective <span class="citation">@ahn2022comparison</span>. K-nearest neighbors
+algorithm has a hyper-parameter K, the number of nearest (non missing)
+data points to consider. A choice of K that is too large may lead to
+smoothing over temporal patters (under fitting) this has the effect of
+ignoring potentially important seasonal patterns. On the other hand a
+value of K that is too small could lead to being overly sensitive to the
+noise. The value for K needs to be carefully chosen, typically by cross
+validation, but in a time series context it could be chosen using
+sliding windows and forward chaining. The curse of dimensionality is an
+issue for K-nearest neighbors. With higher dimension it becomes harder
+to find data points that are closer, this can lead to an increased
+sensitivity to noise and misleading imputations. The computational cost
+also increases rapidly with more dimensons in the data making the
+algorithm less efficient. Another issue related to computational cost,
+K-nearest neighbors is a lazy learning algorithm so the complete dataset
+ends up being stored for large datasets this can make the algorithm slow
+or even infeasible</p>
 </div>
-<div id="general-adversial-networks-gam" class="section level5">
-<h5>General Adversial Networks (GAM)</h5>
+<div id="multivariate-imputation-by-chained-equations-mice" class="section level4">
+<h4>Multivariate Imputation by Chained Equations (MICE)</h4>
 </div>
+<div id="general-adversial-networks-gam" class="section level4">
+<h4>General Adversial Networks (GAM)</h4>
 </div>
 </div>
 <div id="univariate-data-imputation" class="section level3">
 <h3>Univariate data imputation</h3>
 <div id="the-struggle-with-univariate-data-imputation" class="section level4">
 <h4>The struggle with univariate data imputation</h4>
+<p>Unlike with a multivariate time series, a univariate time series is
+only one sequence of observations <span class="math inline">\(\{y_1,
+y_2, ..., y_n\}\)</span>. This simplier form actually leads to increased
+difficulty when it comes to imputing a missing value of <span class="math inline">\(y\)</span>, since we can no longer exploit any
+dependencies between the predictor variables in the series. With
+univariate imputation we can only rely on the previous (or future)
+values for <span class="math inline">\(y\)</span> along with the
+implicit time variable <a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.</p>
 </div>
 <div id="last-observed-carried-forward-locf-next-observation-carried-backward-nocb" class="section level4">
 <h4>Last Observed Carried Forward (LOCF) Next Observation Carried
 Backward (NOCB)</h4>
+<p><a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
 </div>
 <div id="meanmedian-imputation" class="section level4">
 <h4>Mean/Median imputation</h4>
 </div>
-<div id="kalman-filtering" class="section level4">
-<h4>Kalman filtering</h4>
+<div id="arima-based-imputation" class="section level4">
+<h4>ARIMA-based Imputation</h4>
+<p>Missing data can be imputed using an ARIMA model <span class="math display">\[\left(1+ \sum_{i=1}^q \beta_i
+B^i\right)y(t)W(t)\]</span> Where <span class="math inline">\(p\)</span>
+is the AR part, <span class="math inline">\(d\)</span> is the degree of
+differencing, <span class="math inline">\(q\)</span> is order of the
+moving average part. In ARIMA based imputation the model will use the
+rest of the series to impute the missing value, if there are several
+missing values then each missing value is calculated one at a time and
+the model will use the previously imputed values as well as the data in
+the series to predict the next missing values #### Kalman filtering</p>
 </div>
-<div id="linear-interpolation" class="section level4">
-<h4>Linear Interpolation</h4>
 </div>
 </div>
 </div>
+<div class="footnotes footnotes-end-of-document">
+<hr />
+<ol>
+<li id="fn1"><p>moritz2015comparison<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>ahn2022comparison<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+</ol>
 </div>
 
 

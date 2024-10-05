@@ -2,21 +2,23 @@
 
 ## Time series
 
-We begin by providing definitions for both uni variate and multivariate time series:  
+\textbf{Missing at random. This basically means that the missingness in the data is not imformative}
 
-A univariate time series $X = \{x_1, x_2, ..., x_t\} \in \mathbb{R}^t$ is a sequence $t$ observations on a single variable.  
-This can be extended to multivariate time series:  
+We begin by providing definitions for both uni variate and multivariate time series:
+
+A univariate time series $X = \{x_1, x_2, ..., x_t\} \in \mathbb{R}^t$ is a sequence $t$ observations on a single variable.\
+This can be extended to multivariate time series:\
 $X = \{x_1, x_2, ..., x_t\}\in \mathbb{R}^{t\times d}$ where each $x_i$ is a $d$ dimensional vector.
 
-
 ## Missing data
+
 \todo[inline]{remove the subsubsection numbers later}
 
-Data missingness is a common occurrence that is common in working with real world data. Missing data can arise from device failures such as measureing equipment failing, or from data censoring (such as from governments) [@little2019statistical]. Missing data typically falls into one of three categories:  
+Data missingness is a common occurrence that is common in working with real world data. Missing data can arise from device failures such as measureing equipment failing, or from data censoring (such as from governments) [@little2019statistical]. Missing data typically falls into one of three categories:
 
 ### Missing Completely at Random (MCAR)
 
-Data is said to be missing completely at random if the distribution that describes how missingness occurs is independent of both the observed and unobserved values in the time series. 
+Data is said to be missing completely at random if the distribution that describes how missingness occurs is independent of both the observed and unobserved values in the time series.
 
 ### Missing at Random (MAR)
 
@@ -24,34 +26,56 @@ Missing at random is when missingness is related to the observed data, but is in
 
 ### Not Missing at Random (NMAR)
 
-Not missing at random means that the missingness is related to the value of the observation itself. An example of this is a sensor that will return a missing value if the recorded value is above 100$^\circ$.
+Not missing at random means that the missingness is related to the value of the observation itself. An example of this is a sensor that will return a missing value if the recorded value is above 100$^\circ$.  
 
 \todo{Come back and include probability notation}
 
-## Missing data imputation
+## Missing data imputation  
+Most missing data imputation methods require MCAR or MAR, this is because these systems of missingness are not informative towards the missing values themselves. \todo[inline]{Can extend this writeup later.}
 
-### Multivariate data imputation
+\todo{Idea is to start with the most basic techniques, then more the more advanced ones}
+### Multivariate data imputation techniques
 
-#### Multivariate data imputation techniques
+#### Simple (naive?) methods 
+\begin{itemize}
+\item Mean/Median
+\item Forward/backward fill
+\item Linear interpolation
+\end{itemize}
 
-##### K-Nearest Neighbours
+#### K-nearest neighbours
 
-##### Multivariate Imputation by Chained Equations (MICE)
+K-Nearest neighbors is a simple non-parametric machine learning algorithm, it can be used for either classification or regression. It can be applied in a time series data imputation context to estimate missing values in a time series.
 
-##### General Adversial Networks (GAM)
+$$\frac{1}{K}\sum_{j=1}^K Y_j$$
+Consider a missing value $x_i$ in a time series, k-nearest neighbors will impute a value for the missing value by calculating the mean of the datapoints in the neighborhood determined by a distance metric such as Euclidean distance. The algorithm is simple and is shown to be quite effective @ahn2022comparison. K-nearest neighbors algorithm has a hyper-parameter K, the number of nearest (non missing) data points to consider. A choice of K that is too large may lead to smoothing over temporal patters (under fitting) this has the effect of ignoring potentially important seasonal patterns. On the other hand a value of K that is too small could lead to being overly sensitive to the noise. The value for K needs to be carefully chosen, typically by cross validation, but in a time series context it could be chosen using sliding windows and forward chaining.
+The curse of dimensionality is an issue for K-nearest neighbors. With higher dimension it becomes harder to find data points that are closer, this can lead to an increased sensitivity to noise and misleading imputations. The computational cost also increases rapidly with more dimensons in the data making the algorithm less efficient.
+Another issue related to computational cost, K-nearest neighbors is a lazy learning algorithm so the complete dataset ends up being stored for large datasets this can make the algorithm slow or even infeasible
+
+
+\todo{Come back to this section later}
+ 
+
+
+#### Multivariate Imputation by Chained Equations (MICE)
+
+#### General Adversial Networks (GAM)
 
 ### Univariate data imputation
 
 #### The struggle with univariate data imputation
+Unlike with a multivariate time series, a univariate time series is only one sequence of observations $\{y_1, y_2, ..., y_n\}$. This simplier form actually leads to increased difficulty when it comes to imputing a missing value of $y$, since we can no longer exploit any dependencies between the predictor variables in the series. With univariate imputation we can only rely on the previous (or future) values for $y$ along with the implicit time variable ^[moritz2015comparison].
 
 #### Last Observed Carried Forward (LOCF) Next Observation Carried Backward (NOCB)
+^[ahn2022comparison]
 
 #### Mean/Median imputation
 
+#### ARIMA-based Imputation
+Missing data can be imputed using an ARIMA model
+$$\left(1+ \sum_{i=1}^q \beta_i B^i\right)y(t)W(t)$$
+Where $p$ is the AR part, $d$ is the degree of differencing, $q$ is order of the moving average part.
+In ARIMA based imputation the model will use the rest of the series to impute the missing value, if there are several missing values then each missing value is calculated one at a time and the model will use the previously imputed values as well as the data in the series to predict the next missing values
 #### Kalman filtering
-
-#### Linear Interpolation
-
-
 
 
