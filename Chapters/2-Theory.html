@@ -438,8 +438,33 @@ or even infeasible</p>
 <div id="multivariate-imputation-by-chained-equations-mice" class="section level4">
 <h4>Multivariate Imputation by Chained Equations (MICE)</h4>
 </div>
-<div id="general-adversial-networks-gam" class="section level4">
-<h4>General Adversial Networks (GAM)</h4>
+<div id="general-adversial-networks-gans" class="section level4">
+<h4>General Adversial Networks (GANs)</h4>
+<p>GANs consist of two neural networks. A generator <em>G</em>, and a
+discriminator <em>D</em>. These two networks are trained simultaneously
+through a game theory approach. It is the generators job to try and
+generate realistic data points, while the discriminator tries to
+distinguish whether the values are true values or values generated from
+the generator. The generator is tasked to try and fool the
+discriminator. In turn, attempting to learn the underlying distribution
+of the data. This class of machine learning models were first purposed
+in 2014 <span class="citation">[@NIPS2014_5ca3e9b1]</span>.</p>
+<p>The typical process of using a GAN is as follows:</p>
+<ol style="list-style-type: decimal">
+<li><p>The generator produces an estimate for the missing values
+conditioned on <strong>all</strong> available observed data
+points.</p></li>
+<li><p>The discriminator evaluates the quality of the imputed value
+compared to real observed values.</p></li>
+<li><p>Both networks are trained to improve the generators ability to
+fool the discriminator.</p></li>
+</ol>
+<p>The training process continues until the generator can emulate
+realistic data that will fool the discriminator and in turn, replicate
+the distribution of the observed data. Given this, GANs can provide a
+powerful architecture for imputing missing values. Particularly in cases
+where imputing techniques can struggle to model the complex
+relationships within the data <span class="citation">[@NIPS2014_5ca3e9b1]</span>.</p>
 </div>
 </div>
 <div id="univariate-data-imputation" class="section level3">
