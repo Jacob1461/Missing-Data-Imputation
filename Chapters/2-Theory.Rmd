@@ -72,7 +72,7 @@ missing values themselves. \todo[inline]{Can extend this writeup later.}
 ```
 #### K-nearest neighbours
 
-K-Nearest neighbors is a simple non-parametric machine learning
+K-Nearest neighbours is a simple non-parametric machine learning
 algorithm, it can be used for either classification or regression. It
 can be applied in a time series data imputation context to estimate
 missing values in a time series.
