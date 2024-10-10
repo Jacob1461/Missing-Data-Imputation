@@ -408,16 +408,16 @@ missing values themselves. </p>
 </div>
 <div id="k-nearest-neighbours" class="section level4">
 <h4>K-nearest neighbours</h4>
-<p>K-Nearest neighbors is a simple non-parametric machine learning
+<p>K-Nearest neighbours is a simple non-parametric machine learning
 algorithm, it can be used for either classification or regression. It
 can be applied in a time series data imputation context to estimate
 missing values in a time series.</p>
 <p><span class="math display">\[\frac{1}{K}\sum_{j=1}^K Y_j\]</span>
 Consider a missing value <span class="math inline">\(x_i\)</span> in a
-time series, k-nearest neighbors will impute a value for the missing
-value by calculating the mean of the datapoints in the neighborhood
+time series, k-nearest neighbours will impute a value for the missing
+value by calculating the mean of the data points in the neighbourhood
 determined by a distance metric such as Euclidean distance. The
-algorithm is simple and is shown to be quite effective <span class="citation">@ahn2022comparison</span>. K-nearest neighbors
+algorithm is simple and is shown to be quite effective <span class="citation">@ahn2022comparison</span>. K-nearest neighbours
 algorithm has a hyper-parameter K, the number of nearest (non missing)
 data points to consider. A choice of K that is too large may lead to
 smoothing over temporal patters (under fitting) this has the effect of
@@ -426,26 +426,50 @@ value of K that is too small could lead to being overly sensitive to the
 noise. The value for K needs to be carefully chosen, typically by cross
 validation, but in a time series context it could be chosen using
 sliding windows and forward chaining. The curse of dimensionality is an
-issue for K-nearest neighbors. With higher dimension it becomes harder
+issue for K-nearest neighbours. With higher dimension it becomes harder
 to find data points that are closer, this can lead to an increased
 sensitivity to noise and misleading imputations. The computational cost
-also increases rapidly with more dimensons in the data making the
+also increases rapidly with more dimensions in the data making the
 algorithm less efficient. Another issue related to computational cost,
-K-nearest neighbors is a lazy learning algorithm so the complete dataset
-ends up being stored for large datasets this can make the algorithm slow
-or even infeasible</p>
+K-nearest neighbours is a lazy learning algorithm so the complete
+dataset ends up being stored. For large datasets this can make the
+algorithm slow, or even infeasible</p>
 </div>
 <div id="multivariate-imputation-by-chained-equations-mice" class="section level4">
 <h4>Multivariate Imputation by Chained Equations (MICE)</h4>
+<p>MICE is a common imputation technique that is quick to incorporate
+and yields effective results. The algorithm begins by using something
+simple like mean imputation, to fill in initial missing values.</p>
+<p>For each variable where missingness is present, we build a regression
+model. From there, lagged values <span class="math inline">\({y_{t-1},
+y_{t-2}...,y_{t-n}}\)</span> as predictors. This is to say that if <span class="math inline">\({y(t)}\)</span> is missing. predict using <span class="math inline">\(y_{t-1}\)</span> and other variables.</p>
+<p>impute the missing values for one variable at a time. After that
+variable is imputed, use the updated data and move on to the next
+variable. We repeat this process until we reach convergence for our
+given variable.</p>
+<p>This chained process is typically repeated 5-10 times to generate
+multiple datasets that contain a variation of results.</p>
+<p>After, each data set that has undergone imputation is analysed. Then,
+we combine the results using Rubin’s rule.</p>
+<p>Rubin’s rule is as follows:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Pooled Estimate</strong> (e.g., mean, regression
+coefficient):</p>
+<p><span class="math display">\[\hat{\theta} =
+\frac{1}{m}\sum_{i=1}^{m}\theta_{i}\]</span></p></li>
+</ol>
+<p>where <span class="math inline">\(\hat{\theta}\)</span> is the pooled
+estimate, <span class="math inline">\(m\)</span> is the number of
+imputed datasets, and <span class="math inline">\(\theta_i\)</span> is
+the estimate in each imputed dataset <span class="math inline">\(i\)</span>.</p>
 </div>
-<div id="general-adversial-networks-gans" class="section level4">
-<h4>General Adversial Networks (GANs)</h4>
-<p>GANs consist of two neural networks. A generator <em>G</em>, and a
-discriminator <em>D</em>. These two networks are trained simultaneously
-through a game theory approach. It is the generators job to try and
-generate realistic data points, while the discriminator tries to
-distinguish whether the values are true values or values generated from
-the generator. The generator is tasked to try and fool the
+<div id="general-adversarial-networks-gans" class="section level4">
+<h4>General Adversarial Networks (GANs)</h4>
+<p>GANs consist of two neural networks. A generator <span class="math inline">\((G)\)</span>, and a discriminator <span class="math inline">\((D)\)</span> . These two networks are trained
+simultaneously through a game theory approach. It is the generators job
+to try and generate realistic data points, while the discriminator tries
+to distinguish whether the values are true values or values generated
+from the generator. The generator is tasked to try and fool the
 discriminator. In turn, attempting to learn the underlying distribution
 of the data. This class of machine learning models were first purposed
 in 2014 <span class="citation">[@NIPS2014_5ca3e9b1]</span>.</p>
@@ -465,6 +489,15 @@ the distribution of the observed data. Given this, GANs can provide a
 powerful architecture for imputing missing values. Particularly in cases
 where imputing techniques can struggle to model the complex
 relationships within the data <span class="citation">[@NIPS2014_5ca3e9b1]</span>.</p>
+<div class="float">
+<img src="~/Desktop/MASTERS_2024/STAT_455/time_series_/project/Git/Time-Series-Project/graphs/gan_architecture.png" alt="Structure of our GAN for TS imputation." />
+<div class="figcaption">Structure of our GAN for TS imputation.</div>
+</div>
+<p>In our GAN, we use a standard Generator <span class="math inline">\((G)\)</span>and Discriminator <span class="math inline">\((D)\)</span> to handle missing value imputation.
+The generator receives a sampled vector from the latent space <span class="math inline">\((Z)\)</span> and uses that to estimate missing
+data points. The discriminator then evaluates whether the generated data
+follows the true observed data. Trained using a minimax game where the
+generator tries to keep fooling the discriminator.</p>
 </div>
 </div>
 <div id="univariate-data-imputation" class="section level3">
