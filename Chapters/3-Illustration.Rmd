@@ -1,7 +1,75 @@
+```{r, include=F}
+library(imputeTS)
+library(zoo)
+library(tidyverse)
+data("AirPassengers")
+set.seed(123)
+```
+
 # Illustration of the method application 
 
 Using the methods of missing data in practice.  
 
 ## The data 
+### AirPassengers
+The first data set is AirPassengers from [@box2015time].....
 
 ## The methods
+### LOCF and NOCB
+The simple methods LOCF and NOCB are analysed first. Consider the plot of the series
+```{r, echo=F}
+plot(AirPassengers)
+```
+The series shows not only a strong increasing trend, but also strong seasonality. It is common place for a time series to have both of these ...  
+
+Now to simulate MCAR randomness I randomly set 6% of the observations in the data to be NA. Which corresponds to 8 missing values in this dataset.
+
+```{r, include=FALSE}
+missing_index <- sample(seq_along(AirPassengers), size = floor(length(AirPassengers)*0.06))
+Air.missing.6 <- AirPassengers
+Air.missing.6[missing_index] <- NA
+```
+
+```{r, echo=F}
+Air.locf <- Air.missing.6 |> na.locf()
+plot(AirPassengers)
+points(Air.locf, type = "p", col = 'blue', pch =1)
+Air.nocb <- Air.missing.6 |> na.locf(option = "nocb")
+points(Air.nocb, type = "p", col = 'green', pch = 13, cex = 0.7)
+legend("topleft",
+       legend = c("Original Data", "LOCF Imputation", "NOCB Imputation"),  
+       col = c("black", "blue", "green"),
+       pch = c(NA, 1, 13),              
+       lty = c(1, NA, NA),                
+       lwd = 2,
+       pt.cex = c(NA, 0.7, 1.5),          
+       title = "Legend",                  
+       bty = "n",                         
+       cex = 0.8)    
+```
+\todo[inline]{Discussion of how it looks}
+
+Next I show off the mean imputation (and median maybe)
+```{r}
+plot(AirPassengers)
+Air.mean <- Air.missing.6 |> na_mean()
+lines(Air.mean, type = "l", col = 'blue', lwd =2)
+```
+
+\todo{Discuss how this performs}
+
+```{r}
+Air.interp <- Air.missing.6 |> na_interpolation(option = "linear")
+plot(AirPassengers)
+lines(Air.interp, type = "l", col = 'blue', lwd = 2)
+```
+```{r}
+Air.interp <- Air.missing.6 |> na_kalman()
+plot(AirPassengers)
+lines(Air.interp, type = "l", col = 'blue', lwd = 2)
+
+```
+\todo{Discussion about kalman kicked actual ass}
+
+
+\todo{Come back and make the plots nice. Can also remove some plots and put them in the appdix}
