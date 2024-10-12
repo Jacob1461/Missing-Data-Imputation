@@ -59,17 +59,41 @@ missing values themselves. \todo[inline]{Can extend this writeup later.}
 
 \todo{Idea is to start with the most basic techniques, then more the more advanced ones}
 
+### Univariate data imputation
+
+#### The struggle with univariate data imputation
+
+Unlike with a multivariate time series, a univariate time series is only
+one sequence of observations $\{y_1, y_2, ..., y_n\}$. This simplier
+form actually leads to increased difficulty when it comes to imputing a
+missing value of $y$, since we can no longer exploit any dependencies
+between the predictor variables in the series. With univariate
+imputation we can only rely on the previous (or future) values for $y$
+along with the implicit time variable [^1].
+
+[^1]: moritz2015comparison
+
+#### Last Observed Carried Forward (LOCF) Next Observation Carried Backward (NOCB)
+
+[^2]
+
+[^2]: ahn2022comparison
+
+#### Mean/Median imputation
+
+#### ARIMA-based Imputation
+
+Missing data can be imputed using an ARIMA model
+$$\left(1+ \sum_{i=1}^q \beta_i B^i\right)y(t)W(t)$$ Where $p$ is the AR
+part, $d$ is the degree of differencing, $q$ is order of the moving
+average part. In ARIMA based imputation the model will use the rest of
+the series to impute the missing value, if there are several missing
+values then each missing value is calculated one at a time and the model
+will use the previously imputed values as well as the data in the series
+to predict the next missing values \#### Kalman filtering
+
 ### Multivariate data imputation techniques
 
-#### Simple (naive?) methods
-
-```{=tex}
-\begin{itemize}
-\item Mean/Median
-\item Forward/backward fill
-\item Linear interpolation
-\end{itemize}
-```
 #### K-nearest neighbours
 
 K-Nearest neighbours is a simple non-parametric machine learning
@@ -130,7 +154,8 @@ Rubin's rule is as follows:
     $$\hat{\theta} = \frac{1}{m}\sum_{i=1}^{m}\theta_{i}$$
 
 where $\hat{\theta}$ is the pooled estimate, $m$ is the number of
-imputed datasets, and $\theta_i$ is the estimate in each imputed dataset $i$.
+imputed datasets, and $\theta_i$ is the estimate in each imputed dataset
+$i$.
 
 #### General Adversarial Networks (GANs)
 
@@ -162,8 +187,14 @@ powerful architecture for imputing missing values. Particularly in cases
 where imputing techniques can struggle to model the complex
 relationships within the data [@NIPS2014_5ca3e9b1].
 
-![Structure of our GAN for TS
-imputation.](~/Desktop/MASTERS_2024/STAT_455/time_series_/project/Git/Time-Series-Project/graphs/gan_architecture.png)
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{graphs/gan_architecture.png}
+
+
+\caption{Structure of our GAN for TS imputation}
+\label{fig:Structure_of_gan}  % Corrected spelling
+\end{figure}
 
 In our GAN, we use a standard Generator $(G)$and Discriminator $(D)$ to
 handle missing value imputation. The generator receives a sampled vector
@@ -171,36 +202,3 @@ from the latent space $(Z)$ and uses that to estimate missing data
 points. The discriminator then evaluates whether the generated data
 follows the true observed data. Trained using a minimax game where the
 generator tries to keep fooling the discriminator.
-
-### Univariate data imputation
-
-#### The struggle with univariate data imputation
-
-Unlike with a multivariate time series, a univariate time series is only
-one sequence of observations $\{y_1, y_2, ..., y_n\}$. This simplier
-form actually leads to increased difficulty when it comes to imputing a
-missing value of $y$, since we can no longer exploit any dependencies
-between the predictor variables in the series. With univariate
-imputation we can only rely on the previous (or future) values for $y$
-along with the implicit time variable [^1].
-
-[^1]: moritz2015comparison
-
-#### Last Observed Carried Forward (LOCF) Next Observation Carried Backward (NOCB)
-
-[^2]
-
-[^2]: ahn2022comparison
-
-#### Mean/Median imputation
-
-#### ARIMA-based Imputation
-
-Missing data can be imputed using an ARIMA model
-$$\left(1+ \sum_{i=1}^q \beta_i B^i\right)y(t)W(t)$$ Where $p$ is the AR
-part, $d$ is the degree of differencing, $q$ is order of the moving
-average part. In ARIMA based imputation the model will use the rest of
-the series to impute the missing value, if there are several missing
-values then each missing value is calculated one at a time and the model
-will use the previously imputed values as well as the data in the series
-to predict the next missing values \#### Kalman filtering

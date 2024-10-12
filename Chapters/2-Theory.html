@@ -400,12 +400,42 @@ will return a missing value if the recorded value is above 100<span class="math 
 <p>Most missing data imputation methods require MCAR or MAR, this is
 because these systems of missingness are not informative towards the
 missing values themselves. </p>
+<div id="univariate-data-imputation" class="section level3">
+<h3>Univariate data imputation</h3>
+<div id="the-struggle-with-univariate-data-imputation" class="section level4">
+<h4>The struggle with univariate data imputation</h4>
+<p>Unlike with a multivariate time series, a univariate time series is
+only one sequence of observations <span class="math inline">\(\{y_1,
+y_2, ..., y_n\}\)</span>. This simplier form actually leads to increased
+difficulty when it comes to imputing a missing value of <span class="math inline">\(y\)</span>, since we can no longer exploit any
+dependencies between the predictor variables in the series. With
+univariate imputation we can only rely on the previous (or future)
+values for <span class="math inline">\(y\)</span> along with the
+implicit time variable <a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.</p>
+</div>
+<div id="last-observed-carried-forward-locf-next-observation-carried-backward-nocb" class="section level4">
+<h4>Last Observed Carried Forward (LOCF) Next Observation Carried
+Backward (NOCB)</h4>
+<p><a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
+</div>
+<div id="meanmedian-imputation" class="section level4">
+<h4>Mean/Median imputation</h4>
+</div>
+<div id="arima-based-imputation" class="section level4">
+<h4>ARIMA-based Imputation</h4>
+<p>Missing data can be imputed using an ARIMA model <span class="math display">\[\left(1+ \sum_{i=1}^q \beta_i
+B^i\right)y(t)W(t)\]</span> Where <span class="math inline">\(p\)</span>
+is the AR part, <span class="math inline">\(d\)</span> is the degree of
+differencing, <span class="math inline">\(q\)</span> is order of the
+moving average part. In ARIMA based imputation the model will use the
+rest of the series to impute the missing value, if there are several
+missing values then each missing value is calculated one at a time and
+the model will use the previously imputed values as well as the data in
+the series to predict the next missing values #### Kalman filtering</p>
+</div>
+</div>
 <div id="multivariate-data-imputation-techniques" class="section level3">
 <h3>Multivariate data imputation techniques</h3>
-<div id="simple-naive-methods" class="section level4">
-<h4>Simple (naive?) methods</h4>
-
-</div>
 <div id="k-nearest-neighbours" class="section level4">
 <h4>K-nearest neighbours</h4>
 <p>K-Nearest neighbours is a simple non-parametric machine learning
@@ -489,49 +519,11 @@ the distribution of the observed data. Given this, GANs can provide a
 powerful architecture for imputing missing values. Particularly in cases
 where imputing techniques can struggle to model the complex
 relationships within the data <span class="citation">[@NIPS2014_5ca3e9b1]</span>.</p>
-<div class="float">
-<img src="~/Desktop/MASTERS_2024/STAT_455/time_series_/project/Git/Time-Series-Project/graphs/gan_architecture.png" alt="Structure of our GAN for TS imputation." />
-<div class="figcaption">Structure of our GAN for TS imputation.</div>
-</div>
 <p>In our GAN, we use a standard Generator <span class="math inline">\((G)\)</span>and Discriminator <span class="math inline">\((D)\)</span> to handle missing value imputation.
 The generator receives a sampled vector from the latent space <span class="math inline">\((Z)\)</span> and uses that to estimate missing
 data points. The discriminator then evaluates whether the generated data
 follows the true observed data. Trained using a minimax game where the
 generator tries to keep fooling the discriminator.</p>
-</div>
-</div>
-<div id="univariate-data-imputation" class="section level3">
-<h3>Univariate data imputation</h3>
-<div id="the-struggle-with-univariate-data-imputation" class="section level4">
-<h4>The struggle with univariate data imputation</h4>
-<p>Unlike with a multivariate time series, a univariate time series is
-only one sequence of observations <span class="math inline">\(\{y_1,
-y_2, ..., y_n\}\)</span>. This simplier form actually leads to increased
-difficulty when it comes to imputing a missing value of <span class="math inline">\(y\)</span>, since we can no longer exploit any
-dependencies between the predictor variables in the series. With
-univariate imputation we can only rely on the previous (or future)
-values for <span class="math inline">\(y\)</span> along with the
-implicit time variable <a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.</p>
-</div>
-<div id="last-observed-carried-forward-locf-next-observation-carried-backward-nocb" class="section level4">
-<h4>Last Observed Carried Forward (LOCF) Next Observation Carried
-Backward (NOCB)</h4>
-<p><a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
-</div>
-<div id="meanmedian-imputation" class="section level4">
-<h4>Mean/Median imputation</h4>
-</div>
-<div id="arima-based-imputation" class="section level4">
-<h4>ARIMA-based Imputation</h4>
-<p>Missing data can be imputed using an ARIMA model <span class="math display">\[\left(1+ \sum_{i=1}^q \beta_i
-B^i\right)y(t)W(t)\]</span> Where <span class="math inline">\(p\)</span>
-is the AR part, <span class="math inline">\(d\)</span> is the degree of
-differencing, <span class="math inline">\(q\)</span> is order of the
-moving average part. In ARIMA based imputation the model will use the
-rest of the series to impute the missing value, if there are several
-missing values then each missing value is calculated one at a time and
-the model will use the previously imputed values as well as the data in
-the series to predict the next missing values #### Kalman filtering</p>
 </div>
 </div>
 </div>

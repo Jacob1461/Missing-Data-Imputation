@@ -93,34 +93,45 @@
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 \setcounter{secnumdepth}{5}
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
 \newlength{\cslhangindent}
 \setlength{\cslhangindent}{1.5em}
 \newlength{\csllabelwidth}
 \setlength{\csllabelwidth}{3em}
-\newlength{\cslentryspacingunit} % times entry-spacing
-\setlength{\cslentryspacingunit}{\parskip}
-\newenvironment{CSLReferences}[2] % #1 hanging-ident, #2 entry spacing
- {% don't indent paragraphs
-  \setlength{\parindent}{0pt}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
   % turn on hanging indent if param 1 is 1
   \ifodd #1
-  \let\oldpar\par
-  \def\par{\hangindent=\cslhangindent\oldpar}
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
   \fi
   % set entry spacing
-  \setlength{\parskip}{#2\cslentryspacingunit}
- }%
- {}
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
 \usepackage{calc}
-\newcommand{\CSLBlock}[1]{#1\hfill\break}
-\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{#1}}
-\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{#1}\break}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
 \newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
 \usepackage[colorinlistoftodos]{todonotes}
+\usepackage{graphicx}
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
-\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\usepackage{bookmark}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
 \hypersetup{
@@ -140,41 +151,33 @@
 \setcounter{tocdepth}{1}
 \tableofcontents
 }
-\hypertarget{introduction}{%
-\chapter{Introduction}\label{introduction}}
+\chapter{Introduction}\label{introduction}
 
 (Probably work on this section last)
 
-\hypertarget{what-is-missing-data}{%
-\section{What is missing data}\label{what-is-missing-data}}
+\section{What is missing data}\label{what-is-missing-data}
 
-\hypertarget{issues-caused-by-missing-data}{%
 \section{Issues caused by missing
-data}\label{issues-caused-by-missing-data}}
+data}\label{issues-caused-by-missing-data}
 
-\hypertarget{structure-of-the-report}{%
-\section{Structure of the report}\label{structure-of-the-report}}
+\section{Structure of the report}\label{structure-of-the-report}
 
-\hypertarget{theory}{%
-\chapter{Theory}\label{theory}}
+\chapter{Theory}\label{theory}
 
-\hypertarget{time-series}{%
-\section{Time series}\label{time-series}}
+\section{Time series}\label{time-series}
 
 \textbf{Missing at random. This basically means that the missingness in the data is not imformative}
 
 We begin by providing definitions for both uni variate and multivariate
 time series:
 
-A univariate time series \(Y = \{y_1, y_2, ..., y_t\} \in \mathbb{R}^t\)
+A univariate time series \(X = \{x_1, x_2, ..., x_t\} \in \mathbb{R}^t\)
 is a sequence \(t\) observations on a single variable.\\
 This can be extended to multivariate time series:\\
 \(X = \{x_1, x_2, ..., x_t\}\in \mathbb{R}^{t\times d}\) where each
-\(x_i\) is a \(d\) dimensional vector, with observed values
-\(y = \{y_1, y_2, ..., y_t\} \in \mathbb{R}^t\).
+\(x_i\) is a \(d\) dimensional vector.
 
-\hypertarget{missing-data}{%
-\section{Missing data}\label{missing-data}}
+\section{Missing data}\label{missing-data}
 
 \todo[inline]{remove the subsubsection numbers later}
 
@@ -184,16 +187,14 @@ measureing equipment failing, or from data censoring (such as from
 governments) {[}1{]}. Missing data typically falls into one of three
 categories:
 
-\hypertarget{missing-completely-at-random-mcar}{%
 \subsection{Missing Completely at Random
-(MCAR)}\label{missing-completely-at-random-mcar}}
+(MCAR)}\label{missing-completely-at-random-mcar}
 
 Data is said to be missing completely at random if the distribution that
 describes how missingness occurs is independent of both the observed and
 unobserved values in the time series.
 
-\hypertarget{missing-at-random-mar}{%
-\subsection{Missing at Random (MAR)}\label{missing-at-random-mar}}
+\subsection{Missing at Random (MAR)}\label{missing-at-random-mar}
 
 Missing at random is when missingness is related to the observed data,
 but is independent of the unobserved data. This means that there is some
@@ -201,9 +202,8 @@ external factor that is causing the missingness. An example given in
 {[}2{]} is that data from a sensor is more likely to be missing on
 weekends since on some weekends the sensor is shutdown.
 
-\hypertarget{not-missing-at-random-nmar}{%
 \subsection{Not Missing at Random
-(NMAR)}\label{not-missing-at-random-nmar}}
+(NMAR)}\label{not-missing-at-random-nmar}
 
 Not missing at random means that the missingness is related to the value
 of the observation itself. An example of this is a sensor that will
@@ -211,8 +211,7 @@ return a missing value if the recorded value is above 100\(^\circ\).
 
 \todo{Come back and include probability notation}
 
-\hypertarget{missing-data-imputation}{%
-\section{Missing data imputation}\label{missing-data-imputation}}
+\section{Missing data imputation}\label{missing-data-imputation}
 
 Most missing data imputation methods require MCAR or MAR, this is
 because these systems of missingness are not informative towards the
@@ -220,23 +219,45 @@ missing values themselves. \todo[inline]{Can extend this writeup later.}
 
 \todo{Idea is to start with the most basic techniques, then more the more advanced ones}
 
-\hypertarget{multivariate-data-imputation-techniques}{%
+\subsection{Univariate data
+imputation}\label{univariate-data-imputation}
+
+\subsubsection{The struggle with univariate data
+imputation}\label{the-struggle-with-univariate-data-imputation}
+
+Unlike with a multivariate time series, a univariate time series is only
+one sequence of observations \(\{y_1, y_2, ..., y_n\}\). This simplier
+form actually leads to increased difficulty when it comes to imputing a
+missing value of \(y\), since we can no longer exploit any dependencies
+between the predictor variables in the series. With univariate
+imputation we can only rely on the previous (or future) values for \(y\)
+along with the implicit time variable \footnote{moritz2015comparison}.
+
+\subsubsection{Last Observed Carried Forward (LOCF) Next Observation
+Carried Backward
+(NOCB)}\label{last-observed-carried-forward-locf-next-observation-carried-backward-nocb}
+
+\footnote{ahn2022comparison}
+
+\subsubsection{Mean/Median imputation}\label{meanmedian-imputation}
+
+\subsubsection{ARIMA-based Imputation}\label{arima-based-imputation}
+
+Missing data can be imputed using an ARIMA model
+\[\left(1+ \sum_{i=1}^q \beta_i B^i\right)y(t)W(t)\] Where \(p\) is the
+AR part, \(d\) is the degree of differencing, \(q\) is order of the
+moving average part. In ARIMA based imputation the model will use the
+rest of the series to impute the missing value, if there are several
+missing values then each missing value is calculated one at a time and
+the model will use the previously imputed values as well as the data in
+the series to predict the next missing values \#\#\#\# Kalman filtering
+
 \subsection{Multivariate data imputation
-techniques}\label{multivariate-data-imputation-techniques}}
+techniques}\label{multivariate-data-imputation-techniques}
 
-\hypertarget{simple-naive-methods}{%
-\subsubsection{Simple (naive?) methods}\label{simple-naive-methods}}
+\subsubsection{K-nearest neighbours}\label{k-nearest-neighbours}
 
-\begin{itemize}
-\item Mean/Median
-\item Forward/backward fill
-\item Linear interpolation
-\end{itemize}
-
-\hypertarget{k-nearest-neighbours}{%
-\subsubsection{K-nearest neighbours}\label{k-nearest-neighbours}}
-
-K-Nearest neighbors is a simple non-parametric machine learning
+K-Nearest neighbours is a simple non-parametric machine learning
 algorithm, it can be used for either classification or regression. It
 can be applied in a time series data imputation context to estimate
 missing values in a time series.
@@ -265,9 +286,8 @@ large datasets this can make the algorithm slow, or even infeasible
 
 \todo{Come back to this section later}
 
-\hypertarget{multivariate-imputation-by-chained-equations-mice}{%
 \subsubsection{Multivariate Imputation by Chained Equations
-(MICE)}\label{multivariate-imputation-by-chained-equations-mice}}
+(MICE)}\label{multivariate-imputation-by-chained-equations-mice}
 
 MICE is a common imputation technique that is quick to incorporate and
 yields effective results. The algorithm begins by using something simple
@@ -303,9 +323,8 @@ where \(\hat{\theta}\) is the pooled estimate, \(m\) is the number of
 imputed datasets, and \(\theta_i\) is the estimate in each imputed
 dataset \(i\).
 
-\hypertarget{general-adversarial-networks-gans}{%
 \subsubsection{General Adversarial Networks
-(GANs)}\label{general-adversarial-networks-gans}}
+(GANs)}\label{general-adversarial-networks-gans}
 
 GANs consist of two neural networks. A generator \((G)\), and a
 discriminator \((D)\) . These two networks are trained simultaneously
@@ -339,10 +358,13 @@ powerful architecture for imputing missing values. Particularly in cases
 where imputing techniques can struggle to model the complex
 relationships within the data {[}4{]}.
 
-\begin{figure}
+\begin{figure}[h]
 \centering
-\includegraphics{~/Desktop/MASTERS_2024/STAT_455/time_series_/project/Git/Time-Series-Project/graphs/gan_architecture.png}
-\caption{Structure of our GAN for TS imputation.}
+\includegraphics[width=\textwidth]{graphs/gan_architecture.png}
+
+
+\caption{Structure of our GAN for TS imputation}
+\label{fig:Structure_of_gan}  % Corrected spelling
 \end{figure}
 
 In our GAN, we use a standard Generator \((G)\)and Discriminator \((D)\)
@@ -352,81 +374,96 @@ data points. The discriminator then evaluates whether the generated data
 follows the true observed data. Trained using a minimax game where the
 generator tries to keep fooling the discriminator.
 
-\hypertarget{univariate-data-imputation}{%
-\subsection{Univariate data
-imputation}\label{univariate-data-imputation}}
-
-\hypertarget{the-struggle-with-univariate-data-imputation}{%
-\subsubsection{The struggle with univariate data
-imputation}\label{the-struggle-with-univariate-data-imputation}}
-
-Unlike with a multivariate time series, a univariate time series is only
-one sequence of observations \(\{y_1, y_2, ..., y_n\}\). This simplier
-form actually leads to increased difficulty when it comes to imputing a
-missing value of \(y\), since we can no longer exploit any dependencies
-between the predictor variables in the series. With univariate
-imputation we can only rely on the previous (or future) values for \(y\)
-along with the implicit time variable \footnote{moritz2015comparison}.
-
-\hypertarget{last-observed-carried-forward-locf-next-observation-carried-backward-nocb}{%
-\subsubsection{Last Observed Carried Forward (LOCF) Next Observation
-Carried Backward
-(NOCB)}\label{last-observed-carried-forward-locf-next-observation-carried-backward-nocb}}
-
-\footnote{ahn2022comparison}
-
-\hypertarget{meanmedian-imputation}{%
-\subsubsection{Mean/Median imputation}\label{meanmedian-imputation}}
-
-\hypertarget{arima-based-imputation}{%
-\subsubsection{ARIMA-based Imputation}\label{arima-based-imputation}}
-
-Missing data can be imputed using an ARIMA model
-\[\left(1+ \sum_{i=1}^q \beta_i B^i\right)y(t)W(t)\] Where \(p\) is the
-AR part, \(d\) is the degree of differencing, \(q\) is order of the
-moving average part. In ARIMA based imputation the model will use the
-rest of the series to impute the missing value, if there are several
-missing values then each missing value is calculated one at a time and
-the model will use the previously imputed values as well as the data in
-the series to predict the next missing values \#\#\#\# Kalman filtering
-
-\hypertarget{illustration-of-the-method-application}{%
 \chapter{Illustration of the method
-application}\label{illustration-of-the-method-application}}
+application}\label{illustration-of-the-method-application}
 
 Using the methods of missing data in practice.
 
-\hypertarget{the-data}{%
-\section{The data}\label{the-data}}
+\section{The data}\label{the-data}
 
-\hypertarget{the-methods}{%
-\section{The methods}\label{the-methods}}
+\subsection{AirPassengers}\label{airpassengers}
 
-\hypertarget{conclusion}{%
-\chapter{Conclusion}\label{conclusion}}
+The first data set is AirPassengers from \textbf{CITATION}
 
-\hypertarget{refs}{}
+\section{The methods}\label{the-methods}
+
+\subsection{LOCF and NOCB}\label{locf-and-nocb}
+
+The simple methods LOCF and NOCB are analysed first. Consider the plot
+of the series
+\includegraphics{ProjectReport_files/figure-latex/unnamed-chunk-13-1.pdf}
+The series shows not only a strong increasing trend, but also strong
+seasonality. It is common place for a time series to have both of these
+\ldots{}
+
+Now to simulate MCAR randomness I randomly set 6\% of the observations
+in the data to be NA. Which corresponds to 8 missing values in this
+dataset.
+
+\includegraphics{ProjectReport_files/figure-latex/unnamed-chunk-15-1.pdf}
+\todo[inline]{Discussion of how it looks}
+
+Next I show off the mean imputation (and median maybe)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(AirPassengers)}
+\NormalTok{Air.mean }\OtherTok{\textless{}{-}}\NormalTok{ Air.missing}\FloatTok{.6} \SpecialCharTok{|\textgreater{}} \FunctionTok{na\_mean}\NormalTok{()}
+\FunctionTok{lines}\NormalTok{(Air.mean, }\AttributeTok{type =} \StringTok{"l"}\NormalTok{, }\AttributeTok{col =} \StringTok{\textquotesingle{}blue\textquotesingle{}}\NormalTok{, }\AttributeTok{lwd =}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{ProjectReport_files/figure-latex/unnamed-chunk-16-1.pdf}
+
+\todo{Discuss how this performs}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Air.interp }\OtherTok{\textless{}{-}}\NormalTok{ Air.missing}\FloatTok{.6} \SpecialCharTok{|\textgreater{}} \FunctionTok{na\_interpolation}\NormalTok{(}\AttributeTok{option =} \StringTok{"linear"}\NormalTok{)}
+\FunctionTok{plot}\NormalTok{(AirPassengers)}
+\FunctionTok{lines}\NormalTok{(Air.interp, }\AttributeTok{type =} \StringTok{"l"}\NormalTok{, }\AttributeTok{col =} \StringTok{\textquotesingle{}blue\textquotesingle{}}\NormalTok{, }\AttributeTok{lwd =} \DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{ProjectReport_files/figure-latex/unnamed-chunk-17-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Air.interp }\OtherTok{\textless{}{-}}\NormalTok{ Air.missing}\FloatTok{.6} \SpecialCharTok{|\textgreater{}} \FunctionTok{na\_kalman}\NormalTok{()}
+\FunctionTok{plot}\NormalTok{(AirPassengers)}
+\FunctionTok{lines}\NormalTok{(Air.interp, }\AttributeTok{type =} \StringTok{"l"}\NormalTok{, }\AttributeTok{col =} \StringTok{\textquotesingle{}blue\textquotesingle{}}\NormalTok{, }\AttributeTok{lwd =} \DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{ProjectReport_files/figure-latex/unnamed-chunk-18-1.pdf}
+\todo{Discussion about kalman kicked actual ass}
+
+\todo{Come back and make the plots nice. Can also remove some plots and put them in the appdix}
+
+\chapter{Conclusion}\label{conclusion}
+
+\phantomsection\label{refs}
 \begin{CSLReferences}{0}{0}
-\leavevmode\vadjust pre{\hypertarget{ref-little2019statistical}{}}%
+\bibitem[\citeproctext]{ref-little2019statistical}
 \CSLLeftMargin{{[}1{]} }%
 \CSLRightInline{R. J. Little and D. B. Rubin, \emph{Statistical analysis
 with missing data}, vol. 793. John Wiley \& Sons, 2019.}
 
-\leavevmode\vadjust pre{\hypertarget{ref-moritz2015comparison}{}}%
+\bibitem[\citeproctext]{ref-moritz2015comparison}
 \CSLLeftMargin{{[}2{]} }%
 \CSLRightInline{S. Moritz, A. Sardá, T. Bartz-Beielstein, M. Zaefferer,
 and J. Stork, {``Comparison of different methods for univariate time
 series imputation in r,''} \emph{arXiv preprint arXiv:1510.03924},
 2015.}
 
-\leavevmode\vadjust pre{\hypertarget{ref-ahn2022comparison}{}}%
+\bibitem[\citeproctext]{ref-ahn2022comparison}
 \CSLLeftMargin{{[}3{]} }%
 \CSLRightInline{H. Ahn, K. Sun, K. P. Kim, \emph{et al.}, {``Comparison
 of missing data imputation methods in time series forecasting,''}
 \emph{Computers, Materials \& Continua}, vol. 70, no. 1, pp. 767--779,
 2022.}
 
-\leavevmode\vadjust pre{\hypertarget{ref-NIPS2014_5ca3e9b1}{}}%
+\bibitem[\citeproctext]{ref-NIPS2014_5ca3e9b1}
 \CSLLeftMargin{{[}4{]} }%
 \CSLRightInline{I. Goodfellow \emph{et al.}, {``Generative adversarial
 nets,''} in \emph{Advances in neural information processing systems}, Z.
@@ -436,7 +473,6 @@ Eds., Curran Associates, Inc., 2014. Available:
 
 \end{CSLReferences}
 
-\hypertarget{appendix}{%
-\chapter{Appendix}\label{appendix}}
+\chapter{Appendix}\label{appendix}
 
 \end{document}

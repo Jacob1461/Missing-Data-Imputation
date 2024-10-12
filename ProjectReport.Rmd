@@ -10,6 +10,7 @@ output:
     keep_tex: true
 header-includes:
     - \usepackage[colorinlistoftodos]{todonotes}
+    - \usepackage{graphicx}
 documentclass: report
 bibliography: references.bib
 csl: ieee.csl

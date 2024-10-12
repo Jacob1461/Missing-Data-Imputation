@@ -12,7 +12,7 @@ Using the methods of missing data in practice.
 
 ## The data 
 ### AirPassengers
-The first data set is AirPassengers from [@box2015time].....
+The first data set is AirPassengers from \textbf{CITATION}
 
 ## The methods
 ### LOCF and NOCB
