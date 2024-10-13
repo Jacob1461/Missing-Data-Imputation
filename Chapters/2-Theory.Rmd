@@ -80,18 +80,24 @@ along with the implicit time variable [^1].
 [^2]: ahn2022comparison
 
 #### Mean/Median imputation
+This is another simple approach for filling in a missing value. We take the mean over the entire series and impute the missing value with the series mean:
+\begin{equation}\label{eqn:Mean_imputation}
+\hat{\mu} = \sum_i \frac{y_i}{n}
+\end{equation}
 
-#### ARIMA-based Imputation
+If we replace Equation \ref{eqn:Mean_imputation} with the median, then we have median imputation.  
 
-Missing data can be imputed using an ARIMA model
-$$\left(1+ \sum_{i=1}^q \beta_i B^i\right)y(t)W(t)$$ Where $p$ is the AR
-part, $d$ is the degree of differencing, $q$ is order of the moving
-average part. In ARIMA based imputation the model will use the rest of
-the series to impute the missing value, if there are several missing
-values then each missing value is calculated one at a time and the model
-will use the previously imputed values as well as the data in the series
-to predict the next missing values \#### Kalman filtering
+\todo[inline]{Keep talking about why this method is not great in general and why it could be worse for series with a trend}
 
+#### Spline interpolation
+
+A split interpolation of missing data assumes a linear relationship
+between the data points. The equation is given by:
+\begin{equation}\label{eqn:Split_interp}
+f(x) = f(x_0) + \frac{f(x_1)-f(x_0)}{x_1-x_0}(x1_x0)
+\end{equation}
+
+#### Kalman filter 
 ### Multivariate data imputation techniques
 
 #### K-nearest neighbours
