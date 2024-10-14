@@ -3,7 +3,6 @@ library(bookdown)
 library(dplyr)
 library(knitr)
 library(kableExtra)
-print(getwd())
 ```
 
 
