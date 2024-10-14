@@ -1,10 +1,80 @@
-# Illustration of time series imputation
+```{r, include=FALSE, warning=FALSE}
+library(bookdown)
+library(dplyr)
+library(knitr)
+
+```
 
 
+# Illustration of the method application
+
+Using the methods of missing data in practice.
+
+## The data
+
+-   Jacob start with your data.
+
+The data used for multivariate imputation was a subset of CNN data on [kaggle](https://www.kaggle.com/datasets/ehoseinz/cnnpred-stock-market-prediction). This subset was NASDAQ data comprising of features from various categories of technical indication. There are 81 variables, from those, there are 80 variables with missingness, within those 80 variables, there is a cumulative percentage of 1.88% missing data. $n=1984$ is the number of values that need imputing. There are $105531$ data-points in total. Let it be known that we do not have the ground truths for the original data.
+
+## The methods
+
+### MICE
+
+We run MICE imputation for 25 iterations, or to convergence, whatever happened first, as there was a large amount of data in the NASDAQ dataset. Convergence is essential when imputing with MICE so the high level of iterations meant we could reach convergence. In practise, 10 is typically used. Although that would commonly be seen on a much smaller dataset.
+
+### GAN
+
+We train the GAN on the features of the NASDAQ data. Training was conducted for 1500 epochs with mini batch sizes of 128.
+
+In each epoch:
+
+-   A batch of real data is selected, which passes through the generator to generate synthetic data.
+
+-   The discriminator is trained using real and synthetic values, it receives real labels for the real data and receives fake labels for the synthetic data.
+
+-   After training the discriminator, the generator is optimised to minimise the adversarial loss (fool our discriminator). And reconstruction loss (ensure the generated data is resembling our generated data).
+
+Our hyper parameters for the model was *hidden_size=128, latent_size=256, epochs=1500, batch_size=128*.
+
+### Quality of results
+
+After imputation, we use Kernel Density Estimation to estimate the true distribution for the variables in our data, as well as our imputation methods. KDE provides a smooth estimation for the true distribution.
+
+The Kullback-Leibler (KL) divergence is used to measure the difference between the distributions of our imputed data (GAN and MICE) against our original data (with missingness). Since the ground truth for our original data is not known, this comparison helps us asses how well our imputation methods match the inferred distribution of our original data.
+
+The KL Divergence is calculated for each variable, and each method that went through imputation. We then take the mean over all the variables for each method to get an overall average and assessment of how well our imputation methods work.
+
+```{r, echo=FALSE, warning=FALSE}
+kl_metrics <- read.csv("~/Desktop/MASTERS_2024/STAT_455/time_series_/project/Git/Time-Series-Project/metrics/kl_divergence_metrics.csv", header = TRUE)
+kl_metrics %>% head() %>% 
+  kable(caption = "KL Divergence Metrics")
+```
+
+By doing this, we can try and gain an understanding into how well our methods have worked while having the absence of ground truths in our data.
+
+```{r times-table, echo=FALSE, warning=FALSE}
+
+times <- read.csv("/Users/raysmith/Desktop/MASTERS_2024/STAT_455/time_series_/project/Git/Time-Series-Project/metrics/times_multivariate.csv", header = TRUE)
 
 
+kable(times, caption = "Imputation Method Times")
+
+```
+
+From **Table 3.2**, we can see that MICE was the quickest method out of the two. It almost took half the time to train as the GAN. 
+
+```{r, echo=FALSE, warning=FALSE}
+
+kl_means <- read.csv("~/Desktop/MASTERS_2024/STAT_455/time_series_/project/Git/Time-Series-Project/metrics/mean_kl_divergence.csv", header = TRUE)
+
+
+kable(kl_means, caption = "Mean KL Divergence Means")
+
+```
+
+Overall, MICE provided us with the best results in the quickest period of times. 
+**Table3.3** summarises the mean KL divergence for each method. Further training and hyper parameter training of the GAN could yield better results but that would need to be conducted in further research. 
 
 
 ```{r child='chapter3_content/univariate_figs.Rmd'}
 ```
-

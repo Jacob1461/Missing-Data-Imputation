@@ -206,3 +206,152 @@ from the latent space $(Z)$ and uses that to estimate missing data
 points. The discriminator then evaluates whether the generated data
 follows the true observed data. Trained using a minimax game where the
 generator tries to keep fooling the discriminator.
+Not missing at random means that the missingness is related to the value
+of the observation itself. An example of this is a sensor that will
+return a missing value if the recorded value is above 100$^\circ$.
+
+\todo{Come back and include probability notation}
+
+## Missing data imputation
+
+Most missing data imputation methods require MCAR or MAR, this is
+because these systems of missingness are not informative towards the
+missing values themselves. \todo[inline]{Can extend this writeup later.}
+
+\todo{Idea is to start with the most basic techniques, then more the more advanced ones}
+
+### Multivariate data imputation techniques
+
+#### Simple (naive?) methods
+
+```{=tex}
+\begin{itemize}
+\item Mean/Median
+\item Forward/backward fill
+\item Linear interpolation
+\end{itemize}
+```
+#### K-nearest neighbours
+
+K-Nearest neighbours is a simple non-parametric machine learning
+algorithm, it can be used for either classification or regression. It
+can be applied in a time series data imputation context to estimate
+missing values in a time series.
+
+$$\frac{1}{K}\sum_{j=1}^K Y_j$$ Consider a missing value $x_i$ in a time
+series, k-nearest neighbours will impute a value for the missing value
+by calculating the mean of the data points in the neighbourhood
+determined by a distance metric such as Euclidean distance. The
+algorithm is simple and is shown to be quite effective
+@ahn2022comparison. K-nearest neighbours algorithm has a hyper-parameter
+K, the number of nearest (non missing) data points to consider. A choice
+of K that is too large may lead to smoothing over temporal patters
+(under fitting) this has the effect of ignoring potentially important
+seasonal patterns. On the other hand a value of K that is too small
+could lead to being overly sensitive to the noise. The value for K needs
+to be carefully chosen, typically by cross validation, but in a time
+series context it could be chosen using sliding windows and forward
+chaining. The curse of dimensionality is an issue for K-nearest
+neighbours. With higher dimension it becomes harder to find data points
+that are closer, this can lead to an increased sensitivity to noise and
+misleading imputations. The computational cost also increases rapidly
+with more dimensions in the data making the algorithm less efficient.
+Another issue related to computational cost, K-nearest neighbours is a
+lazy learning algorithm so the complete dataset ends up being stored.
+For large datasets this can make the algorithm slow, or even infeasible
+
+\todo{Come back to this section later}
+
+#### Multivariate Imputation by Chained Equations (MICE)
+
+MICE is a common imputation technique that is quick to incorporate and
+yields effective results. The algorithm begins by using something simple
+like mean imputation, to fill in initial missing values.
+
+For each variable where missingness is present, we build a regression
+model. From there, lagged values ${y_{t-1}, y_{t-2}...,y_{t-n}}$ as
+predictors. This is to say that if ${y(t)}$ is missing. predict using
+$y_{t-1}$ and other variables.
+
+impute the missing values for one variable at a time. After that
+variable is imputed, use the updated data and move on to the next
+variable. We repeat this process until we reach convergence for our
+given variable. Reaching convergence is important because it shows that the values we are imputing have stabilized. 
+
+This chained process is typically repeated 10 times to generate
+multiple datasets that contain a variation of results.
+
+
+
+#### General Adversarial Networks (GANs)
+
+GANs consist of two neural networks. A generator $(G)$, and a
+discriminator $(D)$ . These two networks are trained simultaneously
+through a game theory approach. It is the generators job to try and
+generate realistic data points, while the discriminator tries to
+distinguish whether the values are true values or values generated from
+the generator. The generator is tasked to try and fool the
+discriminator. In turn, attempting to learn the underlying distribution
+of the data. This class of machine learning models were first purposed
+in 2014 [@NIPS2014_5ca3e9b1].
+
+The typical process of using a GAN is as follows:
+
+1)  The generator produces an estimate for the missing values
+    conditioned on **all** available observed data points.
+
+2)  The discriminator evaluates the quality of the imputed value
+    compared to real observed values.
+
+3)  Both networks are trained to improve the generators ability to fool
+    the discriminator.
+
+The training process continues until the generator can emulate realistic
+data that will fool the discriminator and in turn, replicate the
+distribution of the observed data. Given this, GANs can provide a
+powerful architecture for imputing missing values. Particularly in cases
+where imputing techniques can struggle to model the complex
+relationships within the data [@NIPS2014_5ca3e9b1].
+
+![Structure of our GAN for TS
+imputation.](~/Desktop/MASTERS_2024/STAT_455/time_series_/project/Git/Time-Series-Project/graphs/gan_architecture.png)
+
+In our GAN, we use a standard Generator $(G)$and Discriminator $(D)$ to
+handle missing value imputation. The generator receives a sampled vector
+from the latent space $(Z)$ and uses that to estimate missing data
+points. The discriminator then evaluates whether the generated data
+follows the true observed data. Trained using a minimax game where the
+generator tries to keep fooling the discriminator.
+
+### Univariate data imputation
+
+#### The struggle with univariate data imputation
+
+Unlike with a multivariate time series, a univariate time series is only
+one sequence of observations $\{y_1, y_2, ..., y_n\}$. This simpler
+form actually leads to increased difficulty when it comes to imputing a
+missing value of $y$, since we can no longer exploit any dependencies
+between the predictor variables in the series. With univariate
+imputation we can only rely on the previous (or future) values for $y$
+along with the implicit time variable [^1].
+
+[^1]: moritz2015comparison
+
+#### Last Observed Carried Forward (LOCF) Next Observation Carried Backward (NOCB)
+
+[^2]
+
+[^2]: ahn2022comparison
+
+#### Mean/Median imputation
+
+#### ARIMA-based Imputation
+
+Missing data can be imputed using an ARIMA model
+$$\left(1+ \sum_{i=1}^q \beta_i B^i\right)y(t)W(t)$$ Where $p$ is the AR
+part, $d$ is the degree of differencing, $q$ is order of the moving
+average part. In ARIMA based imputation the model will use the rest of
+the series to impute the missing value, if there are several missing
+values then each missing value is calculated one at a time and the model
+will use the previously imputed values as well as the data in the series
+to predict the next missing values \#### Kalman filtering
