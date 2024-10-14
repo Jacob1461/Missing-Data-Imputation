@@ -2,7 +2,7 @@
 library(bookdown)
 library(dplyr)
 library(knitr)
-
+library(kableExtra)
 ```
 
 
@@ -45,7 +45,7 @@ The Kullback-Leibler (KL) divergence is used to measure the difference between t
 The KL Divergence is calculated for each variable, and each method that went through imputation. We then take the mean over all the variables for each method to get an overall average and assessment of how well our imputation methods work.
 
 ```{r, echo=FALSE, warning=FALSE}
-kl_metrics <- read.csv("~/Desktop/MASTERS_2024/STAT_455/time_series_/project/Git/Time-Series-Project/metrics/kl_divergence_metrics.csv", header = TRUE)
+kl_metrics <- read.csv("C:/Users/Jacob/OneDrive - University of Canterbury/UC Stuff/4th year/Stat456/Project/Time-Series-Project/metrics/kl_divergence_metrics.csv")
 kl_metrics %>% head() %>% 
   kable(caption = "KL Divergence Metrics")
 ```
@@ -54,7 +54,7 @@ By doing this, we can try and gain an understanding into how well our methods ha
 
 ```{r times-table, echo=FALSE, warning=FALSE}
 
-times <- read.csv("/Users/raysmith/Desktop/MASTERS_2024/STAT_455/time_series_/project/Git/Time-Series-Project/metrics/times_multivariate.csv", header = TRUE)
+times <- read.csv("C:/Users/Jacob/OneDrive - University of Canterbury/UC Stuff/4th year/Stat456/Project/Time-Series-Project/metrics/times_multivariate.csv")
 
 
 kable(times, caption = "Imputation Method Times")
@@ -65,7 +65,8 @@ From **Table 3.2**, we can see that MICE was the quickest method out of the two.
 
 ```{r, echo=FALSE, warning=FALSE}
 
-kl_means <- read.csv("~/Desktop/MASTERS_2024/STAT_455/time_series_/project/Git/Time-Series-Project/metrics/mean_kl_divergence.csv", header = TRUE)
+kl_means <- read.csv("C:/Users/Jacob/OneDrive - University of Canterbury/UC Stuff/4th year/Stat456/Project/Time-Series-Project/metrics/mean_kl_divergence.csv")
+
 
 
 kable(kl_means, caption = "Mean KL Divergence Means")

@@ -313,9 +313,14 @@ powerful architecture for imputing missing values. Particularly in cases
 where imputing techniques can struggle to model the complex
 relationships within the data [@NIPS2014_5ca3e9b1].
 
-![Structure of our GAN for TS
-imputation.](~/Desktop/MASTERS_2024/STAT_455/time_series_/project/Git/Time-Series-Project/graphs/gan_architecture.png)
 
+\begin{figure}
+\centering
+\includegraphics{graphs/gan_architecture.png}
+
+\caption{Structure of a generative adversial network}
+\label{fig:GAN_str}
+\end{figure}
 In our GAN, we use a standard Generator $(G)$and Discriminator $(D)$ to
 handle missing value imputation. The generator receives a sampled vector
 from the latent space $(Z)$ and uses that to estimate missing data
