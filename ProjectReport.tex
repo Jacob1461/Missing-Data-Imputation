@@ -36,46 +36,6 @@
   \KOMAoptions{parskip=half}}
 \makeatother
 \usepackage{xcolor}
-\usepackage{color}
-\usepackage{fancyvrb}
-\newcommand{\VerbBar}{|}
-\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
-\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
-% Add ',fontsize=\small' for more characters per line
-\usepackage{framed}
-\definecolor{shadecolor}{RGB}{248,248,248}
-\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
-\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
-\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
-\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\BuiltInTok}[1]{#1}
-\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
-\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
-\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
-\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
-\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
-\newcommand{\ExtensionTok}[1]{#1}
-\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
-\newcommand{\ImportTok}[1]{#1}
-\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
-\newcommand{\NormalTok}[1]{#1}
-\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
-\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
-\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
-\newcommand{\RegionMarkerTok}[1]{#1}
-\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
-\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
 \usepackage{graphicx}
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
@@ -128,6 +88,12 @@
 \newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
 \usepackage[colorinlistoftodos]{todonotes}
 \usepackage{graphicx}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{appendix}
+\usepackage{caption}
+\usepackage{subfigure}
+\usepackage{biblatex}
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
@@ -142,7 +108,7 @@
 
 \title{Time Series Project}
 \author{Jacob Clinton George Smith-Kolff}
-\date{2024-10-13}
+\date{2024-10-14}
 
 \begin{document}
 \maketitle
@@ -164,7 +130,7 @@ data}\label{issues-caused-by-missing-data}
 
 \chapter{Theory}\label{theory}
 
-\section{Time series}\label{time-series}
+\section{Time series definition}\label{time-series-definition}
 
 \textbf{Missing at random. This basically means that the missingness in the data is not imformative}
 
@@ -177,9 +143,7 @@ This can be extended to multivariate time series:\\
 \(X = \{x_1, x_2, ..., x_t\}\in \mathbb{R}^{t\times d}\) where each
 \(x_i\) is a \(d\) dimensional vector.
 
-\section{Missing data}\label{missing-data}
-
-\todo[inline]{remove the subsubsection numbers later}
+\section{Missing data Mechanisms}\label{missing-data-mechanisms}
 
 Data missingness is a common occurrence that is common in working with
 real world data. Missing data can arise from device failures such as
@@ -241,16 +205,26 @@ Carried Backward
 
 \subsubsection{Mean/Median imputation}\label{meanmedian-imputation}
 
-\subsubsection{ARIMA-based Imputation}\label{arima-based-imputation}
+This is another simple approach for filling in a missing value. We take
+the mean over the entire series and impute the missing value with the
+series mean: \begin{equation}\label{eqn:Mean_imputation}
+\hat{\mu} = \sum_i \frac{y_i}{n}
+\end{equation}
 
-Missing data can be imputed using an ARIMA model
-\[\left(1+ \sum_{i=1}^q \beta_i B^i\right)y(t)W(t)\] Where \(p\) is the
-AR part, \(d\) is the degree of differencing, \(q\) is order of the
-moving average part. In ARIMA based imputation the model will use the
-rest of the series to impute the missing value, if there are several
-missing values then each missing value is calculated one at a time and
-the model will use the previously imputed values as well as the data in
-the series to predict the next missing values \#\#\#\# Kalman filtering
+If we replace Equation \ref{eqn:Mean_imputation} with the median, then
+we have median imputation.
+
+\todo[inline]{Keep talking about why this method is not great in general and why it could be worse for series with a trend}
+
+\subsubsection{Spline interpolation}\label{spline-interpolation}
+
+A split interpolation of missing data assumes a linear relationship
+between the data points. The equation is given by:
+\begin{equation}\label{eqn:Split_interp}
+f(x) = f(x_0) + \frac{f(x_1)-f(x_0)}{x_1-x_0}(x_1 - x_0)
+\end{equation}
+
+\subsubsection{Kalman filter}\label{kalman-filter}
 
 \subsection{Multivariate data imputation
 techniques}\label{multivariate-data-imputation-techniques}
@@ -374,73 +348,37 @@ data points. The discriminator then evaluates whether the generated data
 follows the true observed data. Trained using a minimax game where the
 generator tries to keep fooling the discriminator.
 
-\chapter{Illustration of the method
-application}\label{illustration-of-the-method-application}
+\chapter{Illustration of time series
+imputation}\label{illustration-of-time-series-imputation}
 
-Using the methods of missing data in practice.
+\begin{figure}[ht]
+  \centering
+  \subfigure[Data imputation on Sunspots]{
+    \includegraphics[width=0.45\textwidth]{graphs/univariate/sunspots.png}
+    \label{fig:sunspots}
+  }
+  \subfigure[Data imputation on LakeHeuron]{
+    \includegraphics[width=0.45\textwidth]{graphs/univariate/lake.png}
+    \label{fig:lake}
+  }
+  \subfigure[Data imputation on BeerSales]{
+    \includegraphics[width=0.45\textwidth]{graphs/univariate/beer.png}
+    \label{fig:beer}
+  }
+  \subfigure[Data imputation on Lynx]{
+    \includegraphics[width=0.45\textwidth]{graphs/univariate/lynx.png}
+    \label{fig:lynx}
+  }
+  \caption{Comparison of Locf, Mean, Linear, and Kalman data inputation on four datasets}
+  \label{fig:Univarite_comparison}
+\end{figure}
 
-\section{The data}\label{the-data}
+\chapter{Discussion}\label{discussion}
 
-\subsection{AirPassengers}\label{airpassengers}
+\printbibliography
 
-The first data set is AirPassengers from \textbf{CITATION}
-
-\section{The methods}\label{the-methods}
-
-\subsection{LOCF and NOCB}\label{locf-and-nocb}
-
-The simple methods LOCF and NOCB are analysed first. Consider the plot
-of the series
-\includegraphics{ProjectReport_files/figure-latex/unnamed-chunk-13-1.pdf}
-The series shows not only a strong increasing trend, but also strong
-seasonality. It is common place for a time series to have both of these
-\ldots{}
-
-Now to simulate MCAR randomness I randomly set 6\% of the observations
-in the data to be NA. Which corresponds to 8 missing values in this
-dataset.
-
-\includegraphics{ProjectReport_files/figure-latex/unnamed-chunk-15-1.pdf}
-\todo[inline]{Discussion of how it looks}
-
-Next I show off the mean imputation (and median maybe)
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{plot}\NormalTok{(AirPassengers)}
-\NormalTok{Air.mean }\OtherTok{\textless{}{-}}\NormalTok{ Air.missing}\FloatTok{.6} \SpecialCharTok{|\textgreater{}} \FunctionTok{na\_mean}\NormalTok{()}
-\FunctionTok{lines}\NormalTok{(Air.mean, }\AttributeTok{type =} \StringTok{"l"}\NormalTok{, }\AttributeTok{col =} \StringTok{\textquotesingle{}blue\textquotesingle{}}\NormalTok{, }\AttributeTok{lwd =}\DecValTok{2}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{ProjectReport_files/figure-latex/unnamed-chunk-16-1.pdf}
-
-\todo{Discuss how this performs}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{Air.interp }\OtherTok{\textless{}{-}}\NormalTok{ Air.missing}\FloatTok{.6} \SpecialCharTok{|\textgreater{}} \FunctionTok{na\_interpolation}\NormalTok{(}\AttributeTok{option =} \StringTok{"linear"}\NormalTok{)}
-\FunctionTok{plot}\NormalTok{(AirPassengers)}
-\FunctionTok{lines}\NormalTok{(Air.interp, }\AttributeTok{type =} \StringTok{"l"}\NormalTok{, }\AttributeTok{col =} \StringTok{\textquotesingle{}blue\textquotesingle{}}\NormalTok{, }\AttributeTok{lwd =} \DecValTok{2}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{ProjectReport_files/figure-latex/unnamed-chunk-17-1.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{Air.interp }\OtherTok{\textless{}{-}}\NormalTok{ Air.missing}\FloatTok{.6} \SpecialCharTok{|\textgreater{}} \FunctionTok{na\_kalman}\NormalTok{()}
-\FunctionTok{plot}\NormalTok{(AirPassengers)}
-\FunctionTok{lines}\NormalTok{(Air.interp, }\AttributeTok{type =} \StringTok{"l"}\NormalTok{, }\AttributeTok{col =} \StringTok{\textquotesingle{}blue\textquotesingle{}}\NormalTok{, }\AttributeTok{lwd =} \DecValTok{2}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{ProjectReport_files/figure-latex/unnamed-chunk-18-1.pdf}
-\todo{Discussion about kalman kicked actual ass}
-
-\todo{Come back and make the plots nice. Can also remove some plots and put them in the appdix}
-
-\chapter{Conclusion}\label{conclusion}
+\chapter*{Appendix}\label{appendix}
+\addcontentsline{toc}{chapter}{Appendix}
 
 \phantomsection\label{refs}
 \begin{CSLReferences}{0}{0}
@@ -472,7 +410,5 @@ Eds., Curran Associates, Inc., 2014. Available:
 \url{https://proceedings.neurips.cc/paper_files/paper/2014/file/5ca3e9b122f61f8f06494c97b1afccf3-Paper.pdf}}
 
 \end{CSLReferences}
-
-\chapter{Appendix}\label{appendix}
 
 \end{document}

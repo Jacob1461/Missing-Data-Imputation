@@ -6,7 +6,7 @@ editor_options:
 
 # Theory
 
-## Time series
+## Time series definition
 
 \textbf{Missing at random. This basically means that the missingness in the data is not imformative}
 
@@ -19,9 +19,7 @@ This can be extended to multivariate time series:\
 $X = \{x_1, x_2, ..., x_t\}\in \mathbb{R}^{t\times d}$ where each $x_i$
 is a $d$ dimensional vector.
 
-## Missing data
-
-\todo[inline]{remove the subsubsection numbers later}
+## Missing data Mechanisms
 
 Data missingness is a common occurrence that is common in working with
 real world data. Missing data can arise from device failures such as
@@ -94,7 +92,7 @@ If we replace Equation \ref{eqn:Mean_imputation} with the median, then we have m
 A split interpolation of missing data assumes a linear relationship
 between the data points. The equation is given by:
 \begin{equation}\label{eqn:Split_interp}
-f(x) = f(x_0) + \frac{f(x_1)-f(x_0)}{x_1-x_0}(x1_x0)
+f(x) = f(x_0) + \frac{f(x_1)-f(x_0)}{x_1-x_0}(x_1 - x_0)
 \end{equation}
 
 #### Kalman filter 

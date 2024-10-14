@@ -1,0 +1,21 @@
+\begin{figure}[ht]
+  \centering
+  \subfigure[Data imputation on Sunspots]{
+    \includegraphics[width=0.45\textwidth]{graphs/univariate/sunspots.png}
+    \label{fig:sunspots}
+  }
+  \subfigure[Data imputation on LakeHeuron]{
+    \includegraphics[width=0.45\textwidth]{graphs/univariate/lake.png}
+    \label{fig:lake}
+  }
+  \subfigure[Data imputation on BeerSales]{
+    \includegraphics[width=0.45\textwidth]{graphs/univariate/beer.png}
+    \label{fig:beer}
+  }
+  \subfigure[Data imputation on Lynx]{
+    \includegraphics[width=0.45\textwidth]{graphs/univariate/lynx.png}
+    \label{fig:lynx}
+  }
+  \caption{Comparison of Locf, Mean, Linear, and Kalman data inputation on four datasets}
+  \label{fig:Univarite_comparison}
+\end{figure}

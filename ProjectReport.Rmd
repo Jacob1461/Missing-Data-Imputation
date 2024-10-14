@@ -8,9 +8,16 @@ output:
     number_sections: true
     fig_caption: true
     keep_tex: true
+
 header-includes:
     - \usepackage[colorinlistoftodos]{todonotes}
     - \usepackage{graphicx}
+    - \usepackage{float}
+    - \usepackage{hyperref}
+    - \usepackage{appendix}
+    - \usepackage{caption}
+    - \usepackage{subfigure}
+    - \usepackage{biblatex}
 documentclass: report
 bibliography: references.bib
 csl: ieee.csl
@@ -35,7 +42,8 @@ rm(list=ls())
 ```{r child='Chapters/4-Conclusion.Rmd'}
 ```
 
-<div id="refs"></div>
+
+\printbibliography
 
 ```{r child='Chapters/5-Appendix.Rmd'}
 ```
