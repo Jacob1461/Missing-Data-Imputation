@@ -89,7 +89,7 @@ can be applied in a time series data imputation context to estimate
 missing values in a time series. The equation is given by
 
 \begin{equation}
-\frac{1}{K}\sum_{j=1}^K Y_j.
+\frac{1}{K}\sum_{j=1}^K y_j.
 \end{equation}
 To impute a missing data point we consider the mean value of the K nearest neighbours by Euclidean distance. This approach works well for the correct choice of $k$, but the downside is that this is a hyper-parameter and has to be chosen, perhaps by cross-validation. Another downside is that KNN requires the entire dataset to be stored in memory, which can be infesible for large datasets.
 

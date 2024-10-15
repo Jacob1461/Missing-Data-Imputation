@@ -1,85 +1,53 @@
 
-```{r}
-sunspots_rmse <- read.csv("../../data/Univariate/sunspots_RMSE.csv")
-  
-colnames(sunspots_rmse) <- c("index", "Missing percentage", "LOCF RMSE", "Mean Imputation RMSE", "Linear Interpolation RMSE", "Kalman RMSE")
 
-sunspots_rmse %>% select(-index) |>
-  kable(caption = "RMSE for data imputation methods on Sunspots dataset") 
-
-cat("\\label{tab:RMSE_sunspots}\n")
-
-lake_rmse <- read.csv("../../data/Univariate/lake_RMSE.csv")
-  
-colnames(lake_rmse) <- c("index", "Missing percentage", "LOCF RMSE", "Mean Imputation RMSE", "Linear Interpolation RMSE", "Kalman RMSE")
-
-lake_rmse %>% select(-index) |>
-  kable(caption = "RMSE for data imputation methods on LakeHuron dataset") 
-cat("\\label{tab:RMSE_lake}\n")
-beer_rmse <- read.csv("../../data/Univariate/beer_RMSE.csv")
-  
-colnames(beer_rmse) <- c("index", "Missing percentage", "LOCF RMSE", "Mean Imputation RMSE", "Linear Interpolation RMSE", "Kalman RMSE")
-
-sunspots_rmse %>% select(-index) |>
-  kable(caption = "RMSE for data imputation methods on Beer dataset") 
-cat("\\label{tab:RMSE_beer}\n")
-
-lynx_rmse <- read.csv("../../data/Univariate/lynx_RMSE.csv")
-  
-colnames(lynx_rmse) <- c("index", "Missing percentage", "LOCF RMSE", "Mean Imputation RMSE", "Linear Interpolation RMSE", "Kalman RMSE")
-
-lynx_rmse %>% select(-index) |>
-  kable(caption = "RMSE for data imputation methods on Lynx dataset") 
-cat("\\label{tab:RMSE_lynx}\n")
-```
-```{r}
+```{r, echo=F}
 library(knitr)
 library(kableExtra)
 library(dplyr)
 
-# Read and process Sunspots data
+
 sunspots_rmse <- read.csv("../../data/Univariate/sunspots_RMSE.csv")
-colnames(sunspots_rmse) <- c("index", "Missing percentage", "LOCF RMSE", "Mean Imputation RMSE", "Linear Interpolation RMSE", "Kalman RMSE")
+colnames(sunspots_rmse) <- c("index", "Missing percentage", "LOCF RMSE", "Mean Impute RMSE", "Linear RMSE", "Kalman RMSE")
+
 
 sunspots_rmse %>% 
-  select(-index) %>%
-  kable(caption = "RMSE for data imputation methods on Sunspots dataset", format = "latex", booktabs = TRUE) %>%
-  kable_styling(latex_options = "striped") 
+  select(-index) %>% 
+  mutate(across(c("LOCF RMSE", "Mean Impute RMSE", "Linear RMSE", "Kalman RMSE"), round, 2)) %>%
+  kable(caption = "RMSE for data imputation methods on Sunspots dataset \\label{tab:RMSE_sunspots}", 
+        format = "latex", booktabs = TRUE) %>%
+  kable_styling(latex_options = "striped")
 
-knitr::asis_output("\\label{tab:RMSE_sunspots}")
 
-# Read and process Lake Huron data
 lake_rmse <- read.csv("../../data/Univariate/lake_RMSE.csv")
-colnames(lake_rmse) <- c("index", "Missing percentage", "LOCF RMSE", "Mean Imputation RMSE", "Linear Interpolation RMSE", "Kalman RMSE")
+colnames(lake_rmse) <- c("index", "Missing percentage", "LOCF RMSE", "Mean Impute RMSE", "Linear RMSE", "Kalman RMSE")
 
 lake_rmse %>% 
-  select(-index) %>%
-  kable(caption = "RMSE for data imputation methods on Lake Huron dataset", format = "latex", booktabs = TRUE) %>%
-  kable_styling(latex_options = "striped") 
+  select(-index) %>% 
+  mutate(across(c("LOCF RMSE", "Mean Impute RMSE", "Linear RMSE", "Kalman RMSE"), round, 2)) %>%
+  kable(caption = "RMSE for data imputation methods on Lake Huron dataset \\label{tab:RMSE_lake}", 
+        format = "latex", booktabs = TRUE) %>%
+  kable_styling(latex_options = "striped")
 
-knitr::asis_output("\\label{tab:RMSE_lake}")
 
-# Read and process Beer data
 beer_rmse <- read.csv("../../data/Univariate/beer_RMSE.csv")
-colnames(beer_rmse) <- c("index", "Missing percentage", "LOCF RMSE", "Mean Imputation RMSE", "Linear Interpolation RMSE", "Kalman RMSE")
+colnames(beer_rmse) <- c("index", "Missing percentage", "LOCF RMSE", "Mean Impute RMSE", "Linear RMSE", "Kalman RMSE")
+
 
 beer_rmse %>% 
-  select(-index) %>%
-  kable(caption = "RMSE for data imputation methods on Beer dataset", format = "latex", booktabs = TRUE) %>%
-  kable_styling(latex_options = "striped") 
+  select(-index) %>% 
+  mutate(across(c("LOCF RMSE", "Mean Impute RMSE", "Linear RMSE", "Kalman RMSE"), round, 2)) %>%
+  kable(caption = "RMSE for data imputation methods on Beer dataset \\label{tab:RMSE_beer}", 
+        format = "latex", booktabs = TRUE) %>%
+  kable_styling(latex_options = "striped")
 
-knitr::asis_output("\\label{tab:RMSE_beer}")
-
-# Read and process Lynx data
 lynx_rmse <- read.csv("../../data/Univariate/lynx_RMSE.csv")
-colnames(lynx_rmse) <- c("index", "Missing percentage", "LOCF RMSE", "Mean Imputation RMSE", "Linear Interpolation RMSE", "Kalman RMSE")
+colnames(lynx_rmse) <- c("index", "Missing percentage", "LOCF RMSE", "Mean Impute RMSE", "Linear RMSE", "Kalman RMSE")
 
 lynx_rmse %>% 
-  select(-index) %>%
-  kable(caption = "RMSE for data imputation methods on Lynx dataset", format = "latex", booktabs = TRUE) %>%
-  kable_styling(latex_options = "striped") 
-
-knitr::asis_output("\\label{tab:RMSE_lynx}")
+  select(-index) %>% 
+  mutate(across(c("LOCF RMSE", "Mean Impute RMSE", "Linear RMSE", "Kalman RMSE"), round, 2)) %>%
+  kable(caption = "RMSE for data imputation methods on Lynx dataset \\label{tab:RMSE_lynx}", 
+        format = "latex", booktabs = TRUE) %>%
+  kable_styling(latex_options = "striped")
 
 ```
-
