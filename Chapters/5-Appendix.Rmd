@@ -1,3 +1,6 @@
 # Appendix
 
 
+
+```{r child='chapter3_content/univariate_tables.Rmd'}
+```

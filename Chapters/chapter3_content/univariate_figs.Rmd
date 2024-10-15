@@ -4,7 +4,7 @@
     \includegraphics[width=0.45\textwidth]{graphs/univariate/sunspots.png}
     \label{fig:sunspots}
   }
-  \subfigure[Data imputation on LakeHeuron]{
+  \subfigure[Data imputation on LakeHuron]{
     \includegraphics[width=0.45\textwidth]{graphs/univariate/lake.png}
     \label{fig:lake}
   }

@@ -229,43 +229,53 @@ for(i in 1:N_times){
   #Calculate error metrics for each time series
   
   RMSE2 <- function(new_series, og_series) {
+    # Only compare where new_series has no missing values (i.e., where imputation happened)
+    non_missing_idx <- !is.na(new_series)
     
-    new_series[is.na(new_series)] <- 0
-    og_series[is.na(og_series)] <- 0
-    rmse_value <- MLmetrics::RMSE(new_series, og_series)
+    # Calculate RMSE based on the non-missing indices of new_series
+    rmse_value <- MLmetrics::RMSE(new_series[non_missing_idx], og_series[non_missing_idx])
+    return(rmse_value)
+  }
+  
+  RMSE2_NA <- function(new_series, og_series) {
+    # Find indices where new_series is not NA
+    valid_idx <- !is.na(new_series)
+    
+    # Calculate RMSE only for valid comparisons
+    rmse_value <- MLmetrics::RMSE(new_series[valid_idx], og_series[valid_idx])
     return(rmse_value)
   }
   
   
   #Sunspots
-  sunspots.locf.rmse <- sapply(sunspots_locf_list, function(imputed) RMSE2(imputed, sunspots))
-  sunspots.mean.rmse <- sapply(sunspots_mean_list, function(imputed) RMSE2(imputed, sunspots))
-  sunspots.linear.rmse <- sapply(sunspots_linear_list, function(imputed) RMSE2(imputed, sunspots))
-  sunspots.kalman.rmse <- sapply(sunspots_kalman_list, function(imputed) RMSE2(imputed, sunspots))
+  sunspots.locf.rmse <- sapply(sunspots_locf_list, function(imputed) RMSE2_NA(imputed, sunspots))
+  sunspots.mean.rmse <- sapply(sunspots_mean_list, function(imputed) RMSE2_NA(imputed, sunspots))
+  sunspots.linear.rmse <- sapply(sunspots_linear_list, function(imputed) RMSE2_NA(imputed, sunspots))
+  sunspots.kalman.rmse <- sapply(sunspots_kalman_list, function(imputed) RMSE2_NA(imputed, sunspots))
   
   RMSE_sunspots <- cbind(sunspots.locf.rmse, sunspots.mean.rmse,sunspots.linear.rmse, sunspots.kalman.rmse)
   
   #Lake
-  lake.locf.rmse <- sapply(lake_locf_list, function(imputed) RMSE2(imputed, LakeHuron))
-  lake.mean.rmse <- sapply(lake_mean_list, function(imputed) RMSE2(imputed, LakeHuron))
-  lake.linear.rmse <- sapply(lake_linear_list, function(imputed) RMSE2(imputed, LakeHuron))
-  lake.kalman.rmse <- sapply(lake_kalman_list, function(imputed) RMSE2(imputed, LakeHuron))
+  lake.locf.rmse <- sapply(lake_locf_list, function(imputed) RMSE2_NA(imputed, LakeHuron))
+  lake.mean.rmse <- sapply(lake_mean_list, function(imputed) RMSE2_NA(imputed, LakeHuron))
+  lake.linear.rmse <- sapply(lake_linear_list, function(imputed) RMSE2_NA(imputed, LakeHuron))
+  lake.kalman.rmse <- sapply(lake_kalman_list, function(imputed) RMSE2_NA(imputed, LakeHuron))
   
   RMSE_lake <- cbind(lake.locf.rmse, lake.mean.rmse,lake.linear.rmse, lake.kalman.rmse)
   
   #Beer
   
-  beer.locf.rmse <- sapply(beer_locf_list, function(imputed) RMSE2(imputed, beersales))
-  beer.mean.rmse <- sapply(beer_mean_list, function(imputed) RMSE2(imputed, beersales))
-  beer.linear.rmse <- sapply(beer_linear_list, function(imputed) RMSE2(imputed, beersales))
-  beer.kalman.rmse <- sapply(beer_kalman_list, function(imputed) RMSE2(imputed, beersales))
+  beer.locf.rmse <- sapply(beer_locf_list, function(imputed) RMSE2_NA(imputed, beersales))
+  beer.mean.rmse <- sapply(beer_mean_list, function(imputed) RMSE2_NA(imputed, beersales))
+  beer.linear.rmse <- sapply(beer_linear_list, function(imputed) RMSE2_NA(imputed, beersales))
+  beer.kalman.rmse <- sapply(beer_kalman_list, function(imputed) RMSE2_NA(imputed, beersales))
   
   RMSE_beer <- cbind(beer.locf.rmse, beer.mean.rmse,beer.linear.rmse, beer.kalman.rmse)
   
-  lynx.locf.rmse <- sapply(lynx_locf_list, function(imputed) RMSE2(imputed, lynx))
-  lynx.mean.rmse <- sapply(lynx_mean_list, function(imputed) RMSE2(imputed, lynx))
-  lynx.linear.rmse <- sapply(lynx_linear_list, function(imputed) RMSE2(imputed, lynx))
-  lynx.kalman.rmse <- sapply(lynx_kalman_list, function(imputed) RMSE2(imputed, lynx))
+  lynx.locf.rmse <- sapply(lynx_locf_list, function(imputed) RMSE2_NA(imputed, lynx))
+  lynx.mean.rmse <- sapply(lynx_mean_list, function(imputed) RMSE2_NA(imputed, lynx))
+  lynx.linear.rmse <- sapply(lynx_linear_list, function(imputed) RMSE2_NA(imputed, lynx))
+  lynx.kalman.rmse <- sapply(lynx_kalman_list, function(imputed) RMSE2_NA(imputed, lynx))
   
   RMSE_lynx <- cbind(lynx.locf.rmse, lynx.mean.rmse,lynx.linear.rmse, lynx.kalman.rmse)
   
@@ -275,7 +285,9 @@ for(i in 1:N_times){
 
 
 average_rmse_frame <- Reduce('+', data_frames) / N_times
-write.csv(average_rmse_frame, "Univariate_results_frame.csv")
+
+
+write.csv(average_rmse_frame, "Univariate_results_frame_NA.csv")
 
 res <- as.data.frame(average_rmse_frame)
 
@@ -425,4 +437,52 @@ p <- ggplot(df_long, aes(x = x, y = RMSE, color = Method)) +
   theme(plot.title = element_text(hjust = 0.5))  # Center the title
 
 ggsave("graphs/univariate/lynx.png", plot = p, width = 6, height = 4, dpi = 300, bg = "white")
+
+##########SAVE THE RMSE FOR THE TABLES##############
+
+
+x <- c(seq(10,70,10))
+
+
+results_sunspots <- data.frame(
+  x = x,
+  locf_rmse = res$sunspots.locf.rmse,
+  mean_rmse = res$sunspots.mean.rmse,
+  linear_rmse = res$sunspots.linear.rmse,
+  kalman_rmse = res$sunspots.kalman.rmse
+)
+
+
+
+results_lake <- data.frame(
+  x = x,
+  locf_rmse = res$lake.locf.rmse,
+  mean_rmse = res$lake.mean.rmse,
+  linear_rmse = res$lake.linear.rmse,
+  kalman_rmse = res$lake.kalman.rmse
+)
+
+
+results_beer <- data.frame(
+  x = x,
+  locf_rmse = res$beer.locf.rmse,
+  mean_rmse = res$beer.mean.rmse,
+  linear_rmse = res$beer.linear.rmse,
+  kalman_rmse = res$beer.kalman.rmse
+)
+
+
+results_lynx <- data.frame(
+  x = x,
+  locf_rmse = res$lynx.locf.rmse,
+  mean_rmse = res$lynx.mean.rmse,
+  linear_rmse = res$lynx.linear.rmse,
+  kalman_rmse = res$lynx.kalman.rmse
+)
+
+
+write.csv(results_sunspots, "data/Univariate/sunspots_RMSE.csv")
+write.csv(results_lake, "data/Univariate/lake_RMSE.csv")
+write.csv(results_sunspots, "data/Univariate/beer_RMSE.csv")
+write.csv(results_sunspots, "data/Univariate/lynx_RMSE.csv")
 

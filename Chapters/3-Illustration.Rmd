@@ -11,17 +11,37 @@ library(kableExtra)
 
 Using the methods of missing data in practice.
 
-## The data
+## The data \label{section:the_data}
 
--   Jacob start with your data.
+### Sunspots
 
+The sunspots datasert reports the monthly mean relative sunspot numbers from 1749 to 1983 [@sunspots_Dataset]. There are 2820 observations. This time series has both a trend and seasonality.
+
+### Lake Huron
+
+This dataset reports the annual level of Lake Huron (located in Canada and the United States) measured in feet [@LakeHuron_Dataset]. There are 98 observations in the dataset. This dataset exhibits a downward trend and no clear seasonality.
+
+### Beer Sales  
+
+This dataset reports the monthly beer sales from 1975 to 1990 in millions of barrels [@Beersales_Dataset]. There are 192 observations. This dataset has strong seasonality but no trend.
+
+### Lynx
+
+This dataset records the number of Lynx that are trapped at the Mackenize River district in Canada from 1821 to 1934 [@Lynx_Dataset1; @Lynx_Dataset2; @Lynx_Dataset3]. This dataset has an upward trend and with a cycle of about 7 years.
+
+
+### Stock Market Prediction
 The data used for multivariate imputation was a subset of CNN data on [kaggle](https://www.kaggle.com/datasets/ehoseinz/cnnpred-stock-market-prediction). This subset was NASDAQ data comprising of features from various categories of technical indication. There are 81 variables, from those, there are 80 variables with missingness, within those 80 variables, there is a cumulative percentage of 1.88% missing data. $n=1984$ is the number of values that need imputing. There are $105531$ data-points in total. Let it be known that we do not have the ground truths for the original data.
 
 ## The methods
 
+### Univariate
+
+From the R package missMethods the function delete_MCAR is used to generate MCAR missingess. For each univariate dataset mention in Section \ref{section:the_data} seven datasets are generated with varying degrees of missingness from $10\%$ to $70\%$. With each time series of missing data each of the data imputation methods introduced in Section \ref{Section:univariateimputation} since the true series is known the root mean squared error $RMSE = \sqrt{\sum_{i=1}^n \frac{(y-\hat{y})}{n}}$. The RMSE is not calculated for missing values. The RMSE values are provided in \ref{fig:Univarite_comparison}. Since there is randomness involved with the generation of missing data each test was performed 10 times with different seeds, the RMSE values where then averaged. The table of RMSE values can be found in Table \ref{tab:RMSE_sunspots}, \ref{tab:RMSE_lake}, \ref{tab:RMSE_beer}, \ref{tab:RMSE_lynx}.
+
 ### MICE
 
-We run MICE imputation for 25 iterations, or to convergence, whatever happened first, as there was a large amount of data in the NASDAQ dataset. Convergence is essential when imputing with MICE so the high level of iterations meant we could reach convergence. In practise, 10 is typically used. Although that would commonly be seen on a much smaller dataset.
+We run MICE imputation for 25 iterations, or to convergence, whatever happened first, as there was a large amount of data in the NASDAQ dataset. Convergence is essential when imputing with MICE so the high level of iterations meant we could reach convergence. In practice, 10 is typically used. Although that would commonly be seen on a much smaller dataset.
 
 ### GAN
 
@@ -37,8 +57,13 @@ In each epoch:
 
 Our hyper parameters for the model was *hidden_size=128, latent_size=256, epochs=1500, batch_size=128*.
 
-### Quality of results
+### Quality of results  
 
+#### Univariate
+Figure \ref{fig:Univarite_comparison} shows that for a series with a higher percentage of missing values all method suffer from an increase in RMSE. Mean imputation was overall the worst method in general as it always started with a higher RMSE and is often higher than the other methods. LOCF was the next worst performing method. LOCF was never better than either Linear interpolation or Kalman filtering but does generally beat out mean imputation, since LOCF is copying the proceeding value we still have some autocorrelation structure throughout the series. Linear interpolation and Kalman filtering where the best methods. Kalman filtering was the better method in the Sunspots series as well as the Beer Sales series, but was not quite as good as linear interpolation for the Lake Huron and the Lynx series. From the plots it appears that the slope of the RMSE for the Linear interpolation and Kalman filtering imputation methods is not as steep as that of LOCF and mean imputation suggesting that these method do not struggle as much when the missingness is increased.
+
+
+#### Multivariate
 After imputation, we use Kernel Density Estimation to estimate the true distribution for the variables in our data, as well as our imputation methods. KDE provides a smooth estimation for the true distribution.
 
 The Kullback-Leibler (KL) divergence is used to measure the difference between the distributions of our imputed data (GAN and MICE) against our original data (with missingness). Since the ground truth for our original data is not known, this comparison helps us asses how well our imputation methods match the inferred distribution of our original data.
@@ -80,3 +105,4 @@ Overall, MICE provided us with the best results in the quickest period of times.
 
 ```{r child='chapter3_content/univariate_figs.Rmd'}
 ```
+

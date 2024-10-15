@@ -8,8 +8,6 @@ editor_options:
 
 ## Time series definition
 
-\textbf{Missing at random. This basically means that the missingness in the data is not imformative}
-
 We begin by providing definitions for both uni variate and multivariate
 time series:
 
@@ -55,22 +53,18 @@ because these systems of missingness are not informative towards the
 missing values themselves. 
 
 
-### Univariate data imputation
+### Univariate data imputation \label{Section:univariateimputation}
 
 
 #### Last Observed Carried Forward
 Last Observed Carried Forward (LOCF) is a simple imputation method were a missing data point $y_j$ is replaced with the previous value $y_{j-1}$. This approach can work fine in situations where there is little missing data and if the missing values are not clustered close together. However, this method will fail to work if the first data point is missing. If in impute a missing value $y_j$ with the next value $y_{j+1}$ this is called Next observed carried backward (NOCB).
 
 
-#### Mean/Median imputation
-This is another simple approach for filling in a missing value. We take the mean over the entire series and impute the missing value with the series mean:
-\begin{equation}\label{eqn:Mean_imputation}
-\hat{\mu} = \sum_i \frac{y_i}{n}
+#### Mean imputation
+Another simple approach to filling in missing data in a series is by using mean imputation. We use the equation \begin{equation}
+\overline{y} = \sum_{i=1}^k \frac{y_i}{k}
 \end{equation}
-
-If we replace Equation \ref{eqn:Mean_imputation} with the median, then we have median imputation.  
-
-\todo[inline]{Keep talking about why this method is not great in general and why it could be worse for series with a trend}
+this is going to replace all the missing values of the dataset for the mean of the series. This is going to remove autocorrelation as well as introduce bias towards the mean of the series. Mean imputation can work if there a few missing values and the series is stationary with no seasonality.
 
 #### Spline interpolation
 
@@ -87,36 +81,17 @@ f(x) = f(x_0) + \frac{f(x_1)-f(x_0)}{x_1-x_0}(x_1 - x_0)
 Multivariate data imputation has the added benefit of being able to exploit dependencies between covariates when imputing missing data, as variables are often related in the real world ...
 \todo[inline]{Work on making this sentence not as shit}
 
-#### K-nearest neighbours
+#### K-nearest neighbours (KNN)
 
 K-Nearest neighbours is a simple non-parametric machine learning
 algorithm, it can be used for either classification or regression. It
 can be applied in a time series data imputation context to estimate
-missing values in a time series.
+missing values in a time series. The equation is given by
 
-$$\frac{1}{K}\sum_{j=1}^K Y_j$$ Consider a missing value $x_i$ in a time
-series, k-nearest neighbours will impute a value for the missing value
-by calculating the mean of the data points in the neighbourhood
-determined by a distance metric such as Euclidean distance. The
-algorithm is simple and is shown to be quite effective
-@ahn2022comparison. K-nearest neighbours algorithm has a hyper-parameter
-K, the number of nearest (non missing) data points to consider. A choice
-of K that is too large may lead to smoothing over temporal patters
-(under fitting) this has the effect of ignoring potentially important
-seasonal patterns. On the other hand a value of K that is too small
-could lead to being overly sensitive to the noise. The value for K needs
-to be carefully chosen, typically by cross validation, but in a time
-series context it could be chosen using sliding windows and forward
-chaining. The curse of dimensionality is an issue for K-nearest
-neighbours. With higher dimension it becomes harder to find data points
-that are closer, this can lead to an increased sensitivity to noise and
-misleading imputations. The computational cost also increases rapidly
-with more dimensions in the data making the algorithm less efficient.
-Another issue related to computational cost, K-nearest neighbours is a
-lazy learning algorithm so the complete dataset ends up being stored.
-For large datasets this can make the algorithm slow, or even infeasible
-
-\todo{Come back to this section later}
+\begin{equation}
+\frac{1}{K}\sum_{j=1}^K y_j.
+\end{equation}
+To impute a missing data point we consider the mean value of the K nearest neighbours by Euclidean distance. This approach works well for the correct choice of $k$, but the downside is that this is a hyper-parameter and has to be chosen, perhaps by cross-validation. Another downside is that KNN requires the entire dataset to be stored in memory, which can be infesible for large datasets.
 
 #### Multivariate Imputation by Chained Equations (MICE)
 
@@ -168,7 +143,6 @@ distribution of the observed data. Given this, GANs can provide a
 powerful architecture for imputing missing values. Particularly in cases
 where imputing techniques can struggle to model the complex
 relationships within the data [@NIPS2014_5ca3e9b1].
-\todo[inline]{Reference the image of the GAN in the text}
 
 \begin{figure}
 \centering
@@ -183,9 +157,6 @@ from the latent space $(Z)$ and uses that to estimate missing data
 points. The discriminator then evaluates whether the generated data
 follows the true observed data. Trained using a minimax game where the
 generator tries to keep fooling the discriminator.
-
-
-
 
 
 

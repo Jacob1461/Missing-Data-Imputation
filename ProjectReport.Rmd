@@ -14,7 +14,7 @@ header-includes:
     - \usepackage{graphicx}
     - \usepackage{float}
     - \usepackage{hyperref}
-    - \usepackage{appendix}
+    - \usepackage{appendix} 
     - \usepackage{caption}
     - \usepackage{subfigure}
     - \usepackage{biblatex}
@@ -27,7 +27,6 @@ csl: ieee.csl
 knitr::opts_chunk$set(echo = TRUE)
 library(bookdown)
 rm(list=ls())
-print(getwd())
 ```
 
 
@@ -46,6 +45,7 @@ print(getwd())
 
 
 \printbibliography
+
 
 ```{r child='Chapters/5-Appendix.Rmd'}
 ```
