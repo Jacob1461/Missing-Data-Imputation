@@ -91,7 +91,7 @@ missing values in a time series. The equation is given by
 \begin{equation}
 \frac{1}{K}\sum_{j=1}^K y_j.
 \end{equation}
-To impute a missing data point we consider the mean value of the K nearest neighbours by Euclidean distance. This approach works well for the correct choice of $k$, but the downside is that this is a hyper-parameter and has to be chosen, perhaps by cross-validation. Another downside is that KNN requires the entire dataset to be stored in memory, which can be infesible for large datasets.
+To impute a missing data point we consider the mean value of the K nearest neighbours by a distance measure. This approach works well for the correct choice of $k$, but the downside is that this is a hyper-parameter and has to be chosen, perhaps by cross-validation. Another downside is that KNN requires the entire dataset to be stored in memory, which can be infeasible for large datasets.
 
 #### Multivariate Imputation by Chained Equations (MICE)
 
@@ -111,6 +111,8 @@ given variable. Reaching convergence is important because it shows that the valu
 
 This chained process is typically repeated 10 times to generate
 multiple datasets that contain a variation of results.
+
+MICE also assumes MCAR, if MCAR is not present, results may be biased. 
 
 
 

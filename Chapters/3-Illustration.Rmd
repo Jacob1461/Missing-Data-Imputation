@@ -15,7 +15,7 @@ Using the methods of missing data in practice.
 
 ### Sunspots
 
-The sunspots datasert reports the monthly mean relative sunspot numbers from 1749 to 1983 [@sunspots_Dataset]. There are 2820 observations. This time series has both a trend and seasonality.
+The sunspots dataset reports the monthly mean relative sunspot numbers from 1749 to 1983 [@sunspots_Dataset]. There are 2820 observations. This time series has both a trend and seasonality.
 
 ### Lake Huron
 
@@ -57,6 +57,10 @@ In each epoch:
 
 Our hyper parameters for the model was *hidden_size=128, latent_size=256, epochs=1500, batch_size=128*.
 
+### KNN 
+
+K-nearest neighbours was the last multivariate method used for imputing data. $k=5$ was the value we used.This achieves a good balance between accurancy and time, as k grows there are more centoids to compute. Selecting a higher K could impose greater computational loads but have $k=1$ would be overfitting the data. 
+
 ### Quality of results  
 
 #### Univariate
@@ -87,8 +91,7 @@ kable(times, caption = "Imputation Method Times")
 
 ```
 
-From **Table 3.2**, we can see that MICE was the quickest method out of the two. It almost took half the time to train as the GAN. 
-
+From **Table 3.2**, we can see that KNN was the quickest method out of the three chosen methods. KNN was approximately 150 times faster than MICE. Moreover, it was approximately 300 times faster than the GAN. MICE still had the lowed KL-Divergence score out of the three methods. 
 ```{r, echo=FALSE, warning=FALSE}
 
 kl_means <- read.csv("../metrics/mean_kl_divergence.csv")
