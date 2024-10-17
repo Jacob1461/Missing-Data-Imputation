@@ -70,7 +70,7 @@ Figure \ref{fig:Univarite_comparison} shows that for a series with a higher perc
 #### Multivariate
 After imputation, we use Kernel Density Estimation to estimate the true distribution for the variables in our data, as well as our imputation methods. KDE provides a smooth estimation for the true distribution.
 
-The Kullback-Leibler (KL) divergence is used to measure the difference between the distributions of our imputed data (GAN and MICE) against our original data (with missingness). Since the ground truth for our original data is not known, this comparison helps us asses how well our imputation methods match the inferred distribution of our original data.
+The Kullback-Leibler (KL) divergence is used to measure the difference between the distributions of our imputed data (GAN, MICE, and KNN) against our original data (with missingness). Since the ground truth for our original data is not known, this comparison helps us asses how well our imputation methods match the inferred distribution of our original data.
 
 The KL Divergence is calculated for each variable, and each method that went through imputation. We then take the mean over all the variables for each method to get an overall average and assessment of how well our imputation methods work.
 
@@ -91,7 +91,7 @@ kable(times, caption = "Imputation Method Times")
 
 ```
 
-From **Table 3.2**, we can see that KNN was the quickest method out of the three chosen methods. KNN was approximately 150 times faster than MICE. Moreover, it was approximately 300 times faster than the GAN. MICE still had the lowed KL-Divergence score out of the three methods. 
+From **Table 3.2**, we can see that KNN was the quickest method out of the three chosen methods. KNN was approximately 150 times faster than MICE. Moreover, it was approximately 250 times faster than the GAN. MICE still had the lowed KL-Divergence score out of the three methods. 
 ```{r, echo=FALSE, warning=FALSE}
 
 kl_means <- read.csv("../metrics/mean_kl_divergence.csv")

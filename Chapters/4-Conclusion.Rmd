@@ -4,6 +4,6 @@
 
 - univariate (compared to MNAR, MCAR, MAR), talk about restrictions, etc...
 
-For multivariate imputation, the biggest limitation was time, time in the sense that if we had more time - we could have increased architectures. The GAN suffered from this the most. Neural networks are known as black box technologies so understanding how these networks drew this insights can be a time consuming process. Moreover, the limited time restricted the types of GAN architectures we could employ. More time would have meant more testing, which would allow for more flexibility in the network, and potentially more robust results. As the GAN suffered from the highest KL-Divergence score. 
+For multivariate imputation, the biggest limitation was time, time in the sense that if we had more time - we could have increased architectures. The GAN suffered from this the most. Neural networks are known as black box technologies so understanding how these networks draw these insights can be a time consuming process. Moreover, the limited time restricted the types of GAN architectures we could employ. More time would have meant more testing, which would allow for more flexibility in the network, and potentially more robust results. As the GAN suffered from the highest KL-Divergence score. 
 
 In the case of KNN, we could have employed K-fold cross validation of a large dataset where the ground truth was known, to optimise for our chosen value of K. 
