@@ -78,8 +78,7 @@ f(x) = f(x_0) + \frac{f(x_1)-f(x_0)}{x_1-x_0}(x_1 - x_0)
 
 ### Multivariate data imputation techniques
 
-Multivariate data imputation has the added benefit of being able to exploit dependencies between covariates when imputing missing data, as variables are often related in the real world ...
-\todo[inline]{Work on making this sentence not as shit}
+Multivariate data imputation has the added benefit of being able to exploit dependencies between covariates when imputing missing data. Multivariate data can also exhibit the same temporal structure among variables to make imputation easier. There is an increased framework to handle multivariate missing data as this tends to be more common in practise. 
 
 #### K-nearest neighbours (KNN)
 
