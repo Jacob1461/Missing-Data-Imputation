@@ -75,9 +75,15 @@ The Kullback-Leibler (KL) divergence is used to measure the difference between t
 The KL Divergence is calculated for each variable, and each method that went through imputation. We then take the mean over all the variables for each method to get an overall average and assessment of how well our imputation methods work.
 
 ```{r, echo=FALSE, warning=FALSE}
+
 kl_metrics <- read.csv("../metrics/kl_divergence_metrics.csv")
-kl_metrics %>% head() %>% 
+kl_metrics_rounded <- kl_metrics %>% 
+  mutate_if(is.numeric, ~ round(., 4))
+
+kl_metrics_rounded %>% 
+  head() %>%
   kable(caption = "KL Divergence Metrics")
+
 ```
 
 By doing this, we can try and gain an understanding into how well our methods have worked while having the absence of ground truths in our data.
@@ -96,9 +102,10 @@ From **Table 3.2**, we can see that KNN was the quickest method out of the three
 
 kl_means <- read.csv("../metrics/mean_kl_divergence.csv")
 
+kl_means_rounded <- kl_means %>% 
+  mutate_if(is.numeric, ~ round(., 4))
 
-
-kable(kl_means, caption = "Mean KL Divergence Means")
+kable(kl_means_rounded, caption = "Mean KL Divergence Means")
 
 ```
 
