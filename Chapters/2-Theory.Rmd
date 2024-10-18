@@ -87,7 +87,7 @@ When used for missing data the Kalman filter uses the current state transition e
 
 ### Multivariate data imputation techniques
 
-In a univariate time series there is only the observation and the time point, so in general univariate data imputation is more difficult. With a multivariate time series there are now several variables that relate to an observation at that time point. In many real world scenarios there are correlations between the predictors that can be exploited to fill in a missing value.
+In a univariate time series there is only the observation and the time point, so in general univariate data imputation is more difficult. With a multivariate time series there are now several variables that relate to an observation at that time point. In many real world scenarios there are correlations between the predictors that can be exploited to fill in a missing value. As well as temporal relationships that can be present in multivariate time series data. 
 
 #### K-nearest neighbours (KNN)
 
