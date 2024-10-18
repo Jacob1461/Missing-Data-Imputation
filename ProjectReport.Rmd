@@ -1,5 +1,5 @@
 ---
-title: "Time Series Project"
+title: "Missing Data Imputation Methods for Univariate and Multivariate Time Series"
 author: "Jacob Clinton George Smith-Kolff"
 date: "`r Sys.Date()`"
 output: 
