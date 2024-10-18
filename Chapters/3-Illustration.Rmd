@@ -63,7 +63,7 @@ Our hyper parameters for the model was *hidden_size=128, latent_size=256, epochs
 
 ### KNN 
 
-K-nearest neighbours was the last multivariate method used for imputing data. $K=5$ was the value we used. This achieves a good balance between accurancy and time, as k grows there are more centoids to compute. Selecting a higher K could impose greater computational loads but have $K=1$ would be overfitting the data. 
+K-nearest neighbours was the last multivariate method used for imputing data. $K=5$ was the value we used. This achieves a good balance between accuracy and time, as k grows there are more centoids to compute. Selecting a higher K could impose greater computational loads but have $K=1$ would be over-fitting the data. 
 
 ### Quality of results  
 
@@ -77,11 +77,11 @@ I also provide the RMSE values for each dataset in Tables \ref{tab:RMSE_sunspots
 
 
 #### Multivariate
-After imputation, we use Kernel Density Estimation (KDE) to estimate the true distribution for the variables in our data, as well as our imputation methods. KDE provides a smooth estimation for the true distribution.
+After imputation, we use Kernel Density Estimation (KDE) to estimate the true distribution for the variables in our data, as well as our imputation methods. KDE provides a smooth estimation for the true distribution. 
 
 The Kullback-Leibler (KL) divergence is used to measure the difference between the distributions of our imputed data (GAN, MICE, and KNN) against our original data (with missingness). Since the ground truth for our original data is not known, this comparison helps us asses how well our imputation methods match the inferred distribution of our original data.
 
-The KL Divergence is calculated for each variable, and each method that went through imputation. We then take the mean over all the variables for each method to get an overall average and assessment of how well our imputation methods work.
+The KL Divergence is calculated for each variable, and each method that went through imputation (Table \ref{tab:kl_divergence}). We then take the mean over all the variables for each method to get an overall average and assessment of how well our imputation methods work. 
 
 ```{r, echo=FALSE, warning=FALSE}
 
@@ -118,8 +118,7 @@ kable(kl_means_rounded, caption = "Mean KL Divergence Means \\label{tab:kl_div_m
 
 ```
 
-Overall, MICE provided us with the best results in the quickest period of times. 
-Table \ref{tab:kl_div_means} summarises the mean KL divergence for each method. Further training and hyper parameter tuning of the GAN could yield better results but that would need to be conducted in further research. 
+Overall, MICE provided us with the best results, but KNN provided us with good results compared to MICE given the time taken to impute the missing data. Table \ref{tab:kl_div_means} summarises the mean KL divergence for each method. Further training and hyper parameter tuning of the GAN could yield better results but that would need to be conducted in further research. 
 
 
 
