@@ -223,9 +223,6 @@ for(i in 1:N_times){
     lynx_missing_70.kalman <- lynx_missing_70 |> na_kalman())
   
   
-  
-  
-  
   #Calculate error metrics for each time series
   
   RMSE2 <- function(new_series, og_series) {

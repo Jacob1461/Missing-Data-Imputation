@@ -8,14 +8,15 @@ library(kableExtra)
 
 # Illustration of the method application
 
-
-Using the methods of missing data in practice.
+In this section we define the datasets that are used in our analysis of missing data imputation. We first begin with the datasets used in the univariate tests, then the multivariate dataset. We then discuss the results and analyse the performance of the different data imputation techniques.
 
 ## The data \label{section:the_data}
 
-### Sunspots
+The plots for univariate time series can be found in Figure \ref{fig:timeseries}.
 
-The sunspots dataset reports the monthly mean relative sunspot numbers from 1749 to 1983 [@sunspots_Dataset]. There are 2820 observations. This time series has both a trend and seasonality.
+### Sunspots  
+
+The sunspots dataset reports the monthly mean relative sunspot numbers from 1749 to 1983 [@sunspots_Dataset]. There are 2820 observations. This series has no clear trend, but does exhibit seasonality with a roughtly 11 year cycle.
 
 ### Lake Huron
 
@@ -23,7 +24,7 @@ This dataset reports the annual level of Lake Huron (located in Canada and the U
 
 ### Beer Sales  
 
-This dataset reports the monthly beer sales from 1975 to 1990 in millions of barrels [@Beersales_Dataset]. There are 192 observations. This dataset has strong seasonality but no trend.
+This dataset reports the monthly beer sales from 1975 to 1990 in millions of barrels [@Beersales_Dataset]. There are 192 observations. This dataset shows a clear trend and seasonality.
 
 ### Lynx
 
@@ -37,7 +38,10 @@ The data used for multivariate imputation was a subset of CNN data on [kaggle](h
 
 ### Univariate
 
-From the R package missMethods the function delete_MCAR is used to generate MCAR missingess. For each univariate dataset mention in Section \ref{section:the_data} seven datasets are generated with varying degrees of missingness from $10\%$ to $70\%$. With each time series of missing data each of the data imputation methods introduced in Section \ref{Section:univariateimputation} since the true series is known the root mean squared error $RMSE = \sqrt{\sum_{i=1}^n \frac{(y-\hat{y})}{n}}$. The RMSE is not calculated for missing values. The RMSE values are provided in \ref{fig:Univarite_comparison}. Since there is randomness involved with the generation of missing data each test was performed 10 times with different seeds, the RMSE values where then averaged. The table of RMSE values can be found in Table \ref{tab:RMSE_sunspots}, \ref{tab:RMSE_lake}, \ref{tab:RMSE_beer}, \ref{tab:RMSE_lynx}.
+For each of the univariate datasets introduced in Section \ref{section:the_data} we used missMethods package to generate MCAR missing values. For each dataset we generated seven different series with varying percentages of missing values from 10\% up to 70\%.
+We used the function delete_MCAR() from the R package missMethods to generate MCAR missingess. For each univariate dataset mentioned in Section \ref{section:the_data} MCAR randomness was simulated. We created seven datasets ranging from 10\% missingness up to 70\%. Since the original dataset is know, I used root mean squared error (RMSE) as an error metric. RMSE is defined as \begin{equation}
+RMSE = \sqrt{\sum_{i=1}^n \frac{(y-\hat{y})^2}{n}}. \end{equation} If a missing value could not be imputed (for example LOCF cannot interpolate a missing value if it the first value) then the RMSE is not computed. A comparison of the imputation techniques can be found in Figure ref{fig:Univarite_comparison}. I also provide the RMSE values for each dataset in Table \ref{tab:RMSE_sunspots}, \ref{tab:RMSE_lake}, \ref{tab:RMSE_beer}, \ref{tab:RMSE_lynx}.
+
 
 ### MICE
 
@@ -63,8 +67,9 @@ K-nearest neighbours was the last multivariate method used for imputing data. $k
 
 ### Quality of results  
 
-#### Univariate
-Figure \ref{fig:Univarite_comparison} shows that for a series with a higher percentage of missing values all method suffer from an increase in RMSE. Mean imputation was overall the worst method in general as it always started with a higher RMSE and is often higher than the other methods. LOCF was the next worst performing method. LOCF was never better than either Linear interpolation or Kalman filtering but does generally beat out mean imputation, since LOCF is copying the proceeding value we still have some autocorrelation structure throughout the series. Linear interpolation and Kalman filtering where the best methods. Kalman filtering was the better method in the Sunspots series as well as the Beer Sales series, but was not quite as good as linear interpolation for the Lake Huron and the Lynx series. From the plots it appears that the slope of the RMSE for the Linear interpolation and Kalman filtering imputation methods is not as steep as that of LOCF and mean imputation suggesting that these method do not struggle as much when the missingness is increased.
+#### Univariate  
+
+Figure \ref{fig:Univarite_comparison} shows that every imputation technique suffers from increased RMSE as the percentage of missingness is increased this is to be expected. What is of primary interest is how the RMSE of each imputation technique scales with increasing proportion of missing values. Figure \ref{fig:Univarite_comparison} shows that the increase in RMSE with increasing missingess appears to be linear for all methods. Mean imputation and LOCF are the the worst performing techniques in every test. Mean imputation always starts with the highest RMSE, but as the proportion of missing values are increased mean imputation beats out LOCF in the Beer sales and Lynx datasets. Mean imputation was by far the worst performing method on the sunspots dataset, this is most likely because of the presence of a trend and also the seasonality. The Kalman filter and linear interpolation methods both had very good performance across all datasets. These methods were also less affected by increasing the missingness as opposed to mean imputation and LOCF. Either of these methods would be recommended over LOCF or mean imputation, as even when the series is optimal for mean or LOCF, Kalman filtering or linear interpolation still outperformed.
 
 
 #### Multivariate

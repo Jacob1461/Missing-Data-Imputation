@@ -1,6 +1,8 @@
 
 
-```{r, echo=F}
+
+```{r, echo=F,  warnings = F}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 library(knitr)
 library(kableExtra)
 library(dplyr)
@@ -12,7 +14,7 @@ colnames(sunspots_rmse) <- c("index", "Missing percentage", "LOCF RMSE", "Mean I
 
 sunspots_rmse %>% 
   select(-index) %>% 
-  mutate(across(c("LOCF RMSE", "Mean Impute RMSE", "Linear RMSE", "Kalman RMSE"), round, 2)) %>%
+  mutate(across(c("LOCF RMSE", "Mean Impute RMSE", "Linear RMSE", "Kalman RMSE"), \(x) round(x, 2))) %>%
   kable(caption = "RMSE for data imputation methods on Sunspots dataset \\label{tab:RMSE_sunspots}", 
         format = "latex", booktabs = TRUE) %>%
   kable_styling(latex_options = "striped")
@@ -23,7 +25,7 @@ colnames(lake_rmse) <- c("index", "Missing percentage", "LOCF RMSE", "Mean Imput
 
 lake_rmse %>% 
   select(-index) %>% 
-  mutate(across(c("LOCF RMSE", "Mean Impute RMSE", "Linear RMSE", "Kalman RMSE"), round, 2)) %>%
+  mutate(across(c("LOCF RMSE", "Mean Impute RMSE", "Linear RMSE", "Kalman RMSE"), \(x) round(x, 2))) %>%
   kable(caption = "RMSE for data imputation methods on Lake Huron dataset \\label{tab:RMSE_lake}", 
         format = "latex", booktabs = TRUE) %>%
   kable_styling(latex_options = "striped")
@@ -35,7 +37,7 @@ colnames(beer_rmse) <- c("index", "Missing percentage", "LOCF RMSE", "Mean Imput
 
 beer_rmse %>% 
   select(-index) %>% 
-  mutate(across(c("LOCF RMSE", "Mean Impute RMSE", "Linear RMSE", "Kalman RMSE"), round, 2)) %>%
+  mutate(across(c("LOCF RMSE", "Mean Impute RMSE", "Linear RMSE", "Kalman RMSE"), \(x) round(x, 2)))%>%
   kable(caption = "RMSE for data imputation methods on Beer dataset \\label{tab:RMSE_beer}", 
         format = "latex", booktabs = TRUE) %>%
   kable_styling(latex_options = "striped")
@@ -45,7 +47,7 @@ colnames(lynx_rmse) <- c("index", "Missing percentage", "LOCF RMSE", "Mean Imput
 
 lynx_rmse %>% 
   select(-index) %>% 
-  mutate(across(c("LOCF RMSE", "Mean Impute RMSE", "Linear RMSE", "Kalman RMSE"), round, 2)) %>%
+  mutate(across(c("LOCF RMSE", "Mean Impute RMSE", "Linear RMSE", "Kalman RMSE"), \(x) round(x, 2))) %>%
   kable(caption = "RMSE for data imputation methods on Lynx dataset \\label{tab:RMSE_lynx}", 
         format = "latex", booktabs = TRUE) %>%
   kable_styling(latex_options = "striped")

@@ -4,24 +4,22 @@ editor_options:
     wrap: 72
 ---
 
-# Theory
+# Theory  
+
+In this section we provide an introduction to both univariate and multivariate time series. We also introduce the imputation techniques that will be used.
 
 ## Time series definition
 
-We begin by providing definitions for both uni variate and multivariate
-time series:
-
-A univariate time series $X = \{x_1, x_2, ..., x_t\} \in \mathbb{R}^t$
-is a sequence $t$ observations on a single variable.\
-This can be extended to multivariate time series:\
+A univariate time series, represented as $X = \{x_1, x_2, ..., x_t\} \in \mathbb{R}^t$
+is an ordered sequence of $t$ observations on a single variable. Each observation $x_i$ is indexed by a specific point in time. These observations can be either regularly space (for example daily, monthly, or yearly) or can be irregularly spaced.
+We can extend the univariate case to a multivariate time series, represented as
 $X = \{x_1, x_2, ..., x_t\}\in \mathbb{R}^{t\times d}$ where each $x_i$
-is a $d$ dimensional vector.
+is a $d$ dimensional vector. In this case each the time series consists of an ordered sequence of $t$ observations of several varianbles. We have for each observation $x_i = \{x_{i1}, x_{i2}, ..., x_{id}\}$ is a vector of $d$ values at each time point.
 
 ## Missing data Mechanisms
 
-Data missingness is a common occurrence that is common in working with
-real world data. Missing data can arise from device failures such as
-measureing equipment failing, or from data censoring (such as from
+Missing data is a common occurrence and can be due to human error, or just unforeseeable. Missing data can arise from device failures such as
+measuring equipment failing, or from data censoring (such as from
 governments) [@little2019statistical]. Missing data typically falls into
 one of three categories:
 
@@ -29,7 +27,10 @@ one of three categories:
 
 Data is said to be missing completely at random if the distribution that
 describes how missingness occurs is independent of both the observed and
-unobserved values in the time series.
+unobserved values in the time series. This could be written as \begin{equation}
+P(r|Y_{observed},Y_{missing}) = P(r)
+\end{equation}
+where $r$ is the data missingness indicator variable [@twumasi2019efficiency].  
 
 ### Missing at Random (MAR)
 
@@ -37,49 +38,56 @@ Missing at random is when missingness is related to the observed data,
 but is independent of the unobserved data. This means that there is some
 external factor that is causing the missingness. An example given in
 [@moritz2015comparison] is that data from a sensor is more likely to be
-missing on weekends since on some weekends the sensor is shutdown.
+missing on weekends since on some weekends the sensor is shutdown. This mechanism of missingness could be written as \begin{equation}
+P(r|Y_{observed},Y_{missing}) = P(r|Y_{observed}).
+\end{equation}
 
 ### Not Missing at Random (NMAR)
 
 Not missing at random means that the missingness is related to the value
 of the observation itself. An example of this is a sensor that will
-return a missing value if the recorded value is above 100$^\circ$.
-
+return a missing value if the recorded value is above 100$^\circ c$.
+This missingness mechanism can be expressed as \begin{equation}
+P(r|Y_{observed},Y_{missing}) = P(r|Y_{missing}).
+\end{equation}
+NMAR is the most complex case for missing data imputation and typically involves experimentation with the observed data to see how sensitive it is under various situations [@van2018flexible].  
 
 ## Missing data imputation
 
-Most missing data imputation methods require MCAR or MAR, this is
-because these systems of missingness are not informative towards the
-missing values themselves. 
+The data imputation methods considered for our project work best under the assumptions of MCAR or MAR. This is because, under these mechanisms, the missingness is not informative towards the missing values themselves. These methods may not be suitable in the case of NMAR.
 
 
 ### Univariate data imputation \label{Section:univariateimputation}
 
 
 #### Last Observed Carried Forward
-Last Observed Carried Forward (LOCF) is a simple imputation method were a missing data point $y_j$ is replaced with the previous value $y_{j-1}$. This approach can work fine in situations where there is little missing data and if the missing values are not clustered close together. However, this method will fail to work if the first data point is missing. If in impute a missing value $y_j$ with the next value $y_{j+1}$ this is called Next observed carried backward (NOCB).
+Last Observed Carried Forward (LOCF) is a simple imputation method were a missing data point $x_j$ is replaced with the previous value $x_{j-1}$. This imputation method does not require any assumptions on the series, but does work best for series where the underlying process is stable or changes slowly overtime. It also work best when there are not several consecutive missing values as this would create a long period where the last non missing value is repeated. If in impute a missing value $x_j$ with the next value $x_{j+1}$ this is called Next observed carried backward (NOCB).
+
 
 
 #### Mean imputation
 Another simple approach to filling in missing data in a series is by using mean imputation. We use the equation \begin{equation}
-\overline{y} = \sum_{i=1}^k \frac{y_i}{k}
+\overline{x} = \sum_{i=1}^k \frac{x_i}{k}
 \end{equation}
-this is going to replace all the missing values of the dataset for the mean of the series. This is going to remove autocorrelation as well as introduce bias towards the mean of the series. Mean imputation can work if there a few missing values and the series is stationary with no seasonality.
+With this method, all missing values of the dataset will be replaced with the mean of the series. Mean imputation typically requires the missing data mechanism to be MCAR since there are no patterns in MCAR missing data. Using mean imputation can reduce autocorrelation within a time series as it introduces constant values where missing values occur. Mean imputation is best performed on series where there is low variability in the observed data and the series is stationary. 
 
-#### Spline interpolation
+#### Linear interpolation
 
-A split interpolation of missing data assumes a linear relationship
-between the data points. The equation is given by:
+Linear interpolation uses the two non missing values on the left and right of a missing value in order to impute it. I use the equation as used in [@lepot2017interpolation] by the equation
 \begin{equation}\label{eqn:Split_interp}
-f(x) = f(x_0) + \frac{f(x_1)-f(x_0)}{x_1-x_0}(x_1 - x_0)
+X_i = \frac{x_A - x_B}{a-b}(i-b) + x_B
 \end{equation}
+where $X_i$ is the interpolated data point given two non missing end points $x_A$ and $x_B$, with index $i$. A linear interpolation assumes there is a linear relationship between the points. Therefore, a linear interpolation is not effective across time series that exhibits a non-linear trend. This method is not suitable for large gaps in the series or if the first and or last values are missing (as that would be extrapolation).
 
-#### Kalman filter
+#### Kalman filter  
+
+The Kalman filter was introduced in 1960 by Rudolph Emil Kalman. Kalman filtering is used in a state space model. The kalman filter is an algorithm that works within a state space model framework. It consists of a state equation which models the evolution of the system overtime, and a measurement equation which describes the relationship between the system state to the observed noisey measurements. A Kalman filter is efficient and optimal estimator in terms of minimum mean squared error (MMSE), if the series has both Gaussian noise and the system exhibits linear behavior.
+When used for missing data the Kalman filter uses the current state transition equation to predict the missing value. When observed data is encountered it will update the state estimate. The assumptions make for a Kalman filter to be effective are that the system should be linear with Gaussian noise (if it this is not the case then the the extended Kalman filter would be more appropriate [@benrhmach2020nonlinear]).
+
 
 ### Multivariate data imputation techniques
 
-Multivariate data imputation has the added benefit of being able to exploit dependencies between covariates when imputing missing data, as variables are often related in the real world ...
-\todo[inline]{Work on making this sentence not as shit}
+In a univariate time series there is only the observation and the time point, so in general univariate data imputation is more difficult. With a multivariate time series there are now several variables that relate to an observation at that time point. In many real world scenarios there are correlations between the predictors that can be exploited to fill in a missing value.
 
 #### K-nearest neighbours (KNN)
 
@@ -89,7 +97,7 @@ can be applied in a time series data imputation context to estimate
 missing values in a time series. The equation is given by
 
 \begin{equation}
-\frac{1}{K}\sum_{j=1}^K y_j.
+\frac{1}{K}\sum_{j=1}^K x_j.
 \end{equation}
 To impute a missing data point we consider the mean value of the K nearest neighbours by a distance measure. This approach works well for the correct choice of $k$, but the downside is that this is a hyper-parameter and has to be chosen, perhaps by cross-validation. Another downside is that KNN requires the entire dataset to be stored in memory, which can be infeasible for large datasets.
 
@@ -113,7 +121,6 @@ This chained process is typically repeated 10 times to generate
 multiple datasets that contain a variation of results.
 
 MICE also assumes MCAR, if MCAR is not present, results may be biased. 
-
 
 
 #### General Adversarial Networks (GANs)
@@ -144,15 +151,8 @@ data that will fool the discriminator and in turn, replicate the
 distribution of the observed data. Given this, GANs can provide a
 powerful architecture for imputing missing values. Particularly in cases
 where imputing techniques can struggle to model the complex
-relationships within the data [@NIPS2014_5ca3e9b1].
+relationships within the data [@NIPS2014_5ca3e9b1]. A diagram of the GAN architecture is shown in Figure \ref{fig:GAN_str}.
 
-\begin{figure}
-\centering
-\includegraphics{graphs/gan_architecture.png}
-
-\caption{Structure of a generative adversial network}
-\label{fig:GAN_str}
-\end{figure}
 In our GAN, we use a standard Generator $(G)$and Discriminator $(D)$ to
 handle missing value imputation. The generator receives a sampled vector
 from the latent space $(Z)$ and uses that to estimate missing data

@@ -1,6 +1,32 @@
 # Appendix
 
+```{r, include = F}
+library(TSA)
+data(beersales)
+```
+
+
+\begin{figure}
+\centering
+\includegraphics{graphs/gan_architecture.png}
+
+\caption{Structure of a generative adversial network}
+\label{fig:GAN_str}
+\end{figure}
+
+```{r fig.cap="Plots of time series that were used in the univariate data imputation tests. \\label{fig:timeseries}", echo=FALSE, fig.width=8, fig.height=8}
+
+par(mfrow=c(2,2))
+plot.ts(sunspots, main="Sunspots", ylab="Counts", xlab="Year")
+plot.ts(LakeHuron, main="Lake Huron Levels", ylab="Level", xlab="Year")
+plot.ts(beersales, main="Beer Sales", ylab="Sales", xlab="Year")
+plot.ts(lynx, main="Lynx Trappings", ylab="Counts", xlab="Year")
+
+```
 
 
 ```{r child='chapter3_content/univariate_tables.Rmd'}
 ```
+
+
+

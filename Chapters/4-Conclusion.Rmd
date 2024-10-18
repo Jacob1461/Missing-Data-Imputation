@@ -1,8 +1,7 @@
 # Discussion
 
 ## Limitations
-
-- univariate (compared to MNAR, MCAR, MAR), talk about restrictions, etc...
+For univariate imputation, the primary assumption that was made across all tests was the MCAR mechninism. Given more time to explore these imputation methods it would be interesting to see how they compare when the underlying missingness mechinism is changed. Given more time it would also be benificial to test the methods on a wider variety of datasets, both with a stable linear underlying process but also with more complicated non-linear processes. However, with the results that we have gained from this project it is clear that in general some data imputation techniques are more appropriate than others. 
 
 For multivariate imputation, the biggest limitation was time, time in the sense that if we had more time - we could have increased architectures. The GAN suffered from this the most. Neural networks are known as black box technologies so understanding how these networks drew this insights can be a time consuming process. Moreover, the limited time restricted the types of GAN architectures we could employ. More time would have meant more testing, which would allow for more flexibility in the network, and potentially more robust results. As the GAN suffered from the highest KL-Divergence score. 
 
