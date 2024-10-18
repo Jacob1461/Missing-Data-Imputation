@@ -20,9 +20,11 @@ header-includes:
     - \usepackage{biblatex}
     - \usepackage{titlesec}
     - \titleformat{\chapter}[hang]{\normalfont\huge\bfseries}{\thechapter}{20pt}{\Huge}
+    - \setcounter{secnumdepth}{2}
 documentclass: report
 bibliography: references.bib
 csl: ieee.csl
+geometry: margin=1.3in
 ---
 
 ```{r setup, include=FALSE}

@@ -60,19 +60,20 @@ The data imputation methods considered for our project work best under the assum
 
 
 #### Last Observed Carried Forward
-Last Observed Carried Forward (LOCF) is a simple imputation method were a missing data point $x_j$ is replaced with the previous value $x_{j-1}$. This imputation method does not require any assumptions on the series, but does work best for series where the underlying process is stable or changes slowly overtime. It also work best when there are not several consecutive missing values as this would create a long period where the last non missing value is repeated. If in impute a missing value $x_j$ with the next value $x_{j+1}$ this is called Next observed carried backward (NOCB).
+Last Observed Carried Forward (LOCF) is a simple imputation technique were a missing data point $x_j$ is replaced with the previous value $x_{j-1}$. This imputation technique does not require any assumptions on the series, but does work best for series where the underlying process is stable or changes slowly overtime. It also performs better when there are not several consecutive missing values. This would create a long period where the last non missing value is repeated. A similar imputation technique is called Next observed carried backward (NOCB). Rather than using $x_{j-1}$ to impute $x_j$, we use $x_{j+1}$. Because of the similarity we will only focus on LOCF for this report.
 
 
 
 #### Mean imputation
-Another simple approach to filling in missing data in a series is by using mean imputation. We use the equation \begin{equation}
-\overline{x} = \sum_{i=1}^k \frac{x_i}{k}
+Mean imputation is another simple approach for imputing missing values. The equation is given by \begin{equation}
+\overline{x} = \sum_{i=1}^k \frac{x_i}{k}.
 \end{equation}
+
 With this method, all missing values of the dataset will be replaced with the mean of the series. Mean imputation typically requires the missing data mechanism to be MCAR since there are no patterns in MCAR missing data. Using mean imputation can reduce autocorrelation within a time series as it introduces constant values where missing values occur. Mean imputation is best performed on series where there is low variability in the observed data and the series is stationary. 
 
 #### Linear interpolation
 
-Linear interpolation uses the two non missing values on the left and right of a missing value in order to impute it. I use the equation as used in [@lepot2017interpolation] by the equation
+Linear interpolation uses the two non missing values on the left and right of a missing value in order to impute it. I use the equation as used in [@lepot2017interpolation]
 \begin{equation}\label{eqn:Split_interp}
 X_i = \frac{x_A - x_B}{a-b}(i-b) + x_B
 \end{equation}
@@ -80,8 +81,8 @@ where $X_i$ is the interpolated data point given two non missing end points $x_A
 
 #### Kalman filter  
 
-The Kalman filter was introduced in 1960 by Rudolph Emil Kalman. Kalman filtering is used in a state space model. The kalman filter is an algorithm that works within a state space model framework. It consists of a state equation which models the evolution of the system overtime, and a measurement equation which describes the relationship between the system state to the observed noisey measurements. A Kalman filter is efficient and optimal estimator in terms of minimum mean squared error (MMSE), if the series has both Gaussian noise and the system exhibits linear behavior.
-When used for missing data the Kalman filter uses the current state transition equation to predict the missing value. When observed data is encountered it will update the state estimate. The assumptions make for a Kalman filter to be effective are that the system should be linear with Gaussian noise (if it this is not the case then the the extended Kalman filter would be more appropriate [@benrhmach2020nonlinear]).
+The Kalman filter was introduced in 1960 by Rudolph Emil Kalman. The kalman filter is an algorithm that works within a state space model framework. It consists of a state equation which models the evolution of the system overtime, and a measurement equation which describes the relationship between the system state to the observed noisey measurements. A Kalman filter is an efficient and optimal estimator in terms of minimum mean squared error (MMSE), if the series has both Gaussian noise and the system exhibits linear behavior.
+When used for missing data the Kalman filter uses the current state transition equation to predict the missing value. When observed data is encountered it will update the state estimate.
 
 
 ### Multivariate data imputation techniques
@@ -90,15 +91,14 @@ In a univariate time series there is only the observation and the time point, so
 
 #### K-nearest neighbours (KNN)
 
-K-Nearest neighbours is a simple non-parametric machine learning
-algorithm, it can be used for either classification or regression. It
-can be applied in a time series data imputation context to estimate
-missing values in a time series. The equation is given by
+K-nearest neighbours is a simple non-parametric machine learning
+algorithm, it can be used for either classification or regression tasks. For imputing missing data, KNN finds the K nearest neighbours of a missing data point based on a distance metric (typically euclidean distance). A value is imputed by averaging the values of those K neighbours. The equation is given as:
 
 \begin{equation}
-\frac{1}{K}\sum_{j=1}^K x_j.
+\frac{1}{K}\sum_{j=1}^K x_j
 \end{equation}
-To impute a missing data point we consider the mean value of the K nearest neighbours by a distance measure. This approach works well for the correct choice of $k$, but the downside is that this is a hyper-parameter and has to be chosen, perhaps by cross-validation. Another downside is that KNN requires the entire dataset to be stored in memory, which can be infeasible for large datasets.
+
+where $x_j$ represents the $j^{th}$ nearest neighbour. Whilst KNN can show very strong imputation performance on multivariate time series, the largest downside is the hyper-parameter $K$. The value of $K$ must be appropriately chosen, as having a value of $K$ too small can lead to overfitting, whereas too large $K$ can lead to smoothing (underfitting). $K$ is typically chosen by cross-validation, which can be time consuming espcially for large datasets. Another downside to KNN is that it is a lazy learning algorithm, it will have to re-run everytime there is a missing value that needs to be imputed. KNN must also store the entire dataset in memory. This means that KNN is very computationally demaning, and can be very slow for large datasets.
 
 #### Multivariate Imputation by Chained Equations (MICE)
 
@@ -111,7 +111,7 @@ model. From there, lagged values ${y_{t-1}, y_{t-2}...,y_{t-n}}$ as
 predictors. This is to say that if ${y(t)}$ is missing. predict using
 $y_{t-1}$ and other variables.
 
-impute the missing values for one variable at a time. After that
+Impute the missing values for one variable at a time. After that
 variable is imputed, use the updated data and move on to the next
 variable. We repeat this process until we reach convergence for our
 given variable. Reaching convergence is important because it shows that the values we are imputing have stabilized. 
@@ -125,14 +125,14 @@ MICE also assumes MCAR, if MCAR is not present, results may be biased.
 #### General Adversarial Networks (GANs)
 
 GANs consist of two neural networks. A generator $(G)$, and a
-discriminator $(D)$ . These two networks are trained simultaneously
-through a game theory approach. It is the generators job to try and
+discriminator $(D)$. These two networks are trained simultaneously
+through a game theory approach. It is the generator's job to try and
 generate realistic data points, while the discriminator tries to
 distinguish whether the values are true values or values generated from
 the generator. The generator is tasked to try and fool the
 discriminator. In turn, attempting to learn the underlying distribution
 of the data. This class of machine learning models were first purposed
-in 2014 [@NIPS2014_5ca3e9b1].
+in 2014 [@NIPS2014_5ca3e9b1].Should
 
 The typical process of using a GAN is as follows:
 
@@ -152,7 +152,7 @@ powerful architecture for imputing missing values. Particularly in cases
 where imputing techniques can struggle to model the complex
 relationships within the data [@NIPS2014_5ca3e9b1]. A diagram of the GAN architecture is shown in Figure \ref{fig:GAN_str}.
 
-In our GAN, we use a standard Generator $(G)$and Discriminator $(D)$ to
+In our GAN, we use a standard generator $(G)$ and discriminator $(D)$ to
 handle missing value imputation. The generator receives a sampled vector
 from the latent space $(Z)$ and uses that to estimate missing data
 points. The discriminator then evaluates whether the generated data
