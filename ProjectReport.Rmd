@@ -18,6 +18,8 @@ header-includes:
     - \usepackage{caption}
     - \usepackage{subfigure}
     - \usepackage{biblatex}
+    - \usepackage{titlesec}
+    - \titleformat{\chapter}[hang]{\normalfont\huge\bfseries}{\thechapter}{20pt}{\Huge}
 documentclass: report
 bibliography: references.bib
 csl: ieee.csl
@@ -43,8 +45,9 @@ rm(list=ls())
 ```{r child='Chapters/4-Conclusion.Rmd'}
 ```
 
+# References
 
-\printbibliography
+<div id="refs"></div>
 
 
 ```{r child='Chapters/5-Appendix.Rmd'}

@@ -1,6 +1,6 @@
 # Introduction
 
-Missing data is an unfortunate but very common occurrence in the collection of data. However, with the correct methods, we can attempt to reconstruct the missing data in ways that do not sacrifice the predictive power of the series. In this report, we explore several imputation methods and compare their performance on both univariate and multivariate time series. This project aims to address some of the methods that are widely used in industry to handle missing data. We begin by exploring nieve methods in the univariate case, we then add complexity to our univariate imputation methods and then build up to handle missing data in the multivariate case. We will also employ metrics to conclude which methods are the most robust.  
+Missing data is an unfortunate but very common occurrence in the collection of data. However, with the correct methods, we can attempt to reconstruct the missing data in ways that do not sacrifice the predictive power of the series. In this report, we explore several imputation methods and compare their performance on both univariate and multivariate time series. This project aims to address some of the methods that are widely used in industry to handle missing data. We begin by exploring naive methods in the univariate case, we then add complexity to our univariate imputation methods and then build up to handle missing data in the multivariate case. We will also employ metrics to conclude which methods are the most robust.  
 
 
 

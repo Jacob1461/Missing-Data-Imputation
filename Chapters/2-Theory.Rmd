@@ -14,13 +14,11 @@ A univariate time series, represented as $X = \{x_1, x_2, ..., x_t\} \in \mathbb
 is an ordered sequence of $t$ observations on a single variable. Each observation $x_i$ is indexed by a specific point in time. These observations can be either regularly space (for example daily, monthly, or yearly) or can be irregularly spaced.
 We can extend the univariate case to a multivariate time series, represented as
 $X = \{x_1, x_2, ..., x_t\}\in \mathbb{R}^{t\times d}$ where each $x_i$
-is a $d$ dimensional vector. In this case each the time series consists of an ordered sequence of $t$ observations of several varianbles. We have for each observation $x_i = \{x_{i1}, x_{i2}, ..., x_{id}\}$ is a vector of $d$ values at each time point.
+is a $d$ dimensional vector. In this case each element in the time series consists of an ordered sequence of $t$ observations of several variables. We have for each observation $x_i = \{x_{i1}, x_{i2}, ..., x_{id}\}$ is a vector of $d$ values at each time point.
 
 ## Missing data Mechanisms
 
-Missing data is a common occurrence and can be due to human error, or just unforeseeable. Missing data can arise from device failures such as
-measuring equipment failing, or from data censoring (such as from
-governments) [@little2019statistical]. Missing data typically falls into
+Missing data is a common occurrence and can be due to human error, machine error such as device failures, or data censoring where data is purposely removed [@little2019statistical]. Missing data falls into
 one of three categories:
 
 ### Missing Completely at Random (MCAR)
@@ -28,9 +26,10 @@ one of three categories:
 Data is said to be missing completely at random if the distribution that
 describes how missingness occurs is independent of both the observed and
 unobserved values in the time series. This could be written as \begin{equation}
-P(r|Y_{observed},Y_{missing}) = P(r)
+P(r|X_{observed},X_{missing}) = P(r)
 \end{equation}
-where $r$ is the data missingness indicator variable [@twumasi2019efficiency].  
+where $r$ is an indicator variable for missing data [@twumasi2019efficiency].
+An example of MCAR could be some responses to a survey question where lost due to being corrupted during file transfer or storage The fact that those responses are missing has nothing to do with either the other observed files or the missing files themselves.
 
 ### Missing at Random (MAR)
 
@@ -39,7 +38,7 @@ but is independent of the unobserved data. This means that there is some
 external factor that is causing the missingness. An example given in
 [@moritz2015comparison] is that data from a sensor is more likely to be
 missing on weekends since on some weekends the sensor is shutdown. This mechanism of missingness could be written as \begin{equation}
-P(r|Y_{observed},Y_{missing}) = P(r|Y_{observed}).
+P(r|X_{observed},X_{missing}) = P(r|X_{observed}).
 \end{equation}
 
 ### Not Missing at Random (NMAR)
@@ -48,13 +47,13 @@ Not missing at random means that the missingness is related to the value
 of the observation itself. An example of this is a sensor that will
 return a missing value if the recorded value is above 100$^\circ c$.
 This missingness mechanism can be expressed as \begin{equation}
-P(r|Y_{observed},Y_{missing}) = P(r|Y_{missing}).
+P(r|X_{observed},X_{missing}) = P(r|X_{missing}).
 \end{equation}
 NMAR is the most complex case for missing data imputation and typically involves experimentation with the observed data to see how sensitive it is under various situations [@van2018flexible].  
 
 ## Missing data imputation
 
-The data imputation methods considered for our project work best under the assumptions of MCAR or MAR. This is because, under these mechanisms, the missingness is not informative towards the missing values themselves. These methods may not be suitable in the case of NMAR.
+The data imputation methods considered for our project work best under the assumptions of MCAR or MAR. This is because, under these mechanisms, the missingness is not informative towards the missing values themselves. These methods may not be suitable in the case of NMAR. In the case of NMAR we may get biased results as NMAR provides some information relating to the missing values themselves, more complex techniques would have to be employed when dealing with this type of missingness mechanism.
 
 
 ### Univariate data imputation \label{Section:univariateimputation}
