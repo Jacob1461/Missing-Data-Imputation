@@ -107,9 +107,9 @@ yields effective results. The algorithm begins by using something simple
 like mean imputation, to fill in initial missing values.
 
 For each variable where missingness is present, we build a regression
-model. From there, lagged values ${y_{t-1}, y_{t-2}...,y_{t-n}}$ as
-predictors. This is to say that if ${y(t)}$ is missing. predict using
-$y_{t-1}$ and other variables.
+model. From there, lagged values ${x_{t-1}, x_{t-2}...,x_{t-n}}$ as
+predictors. This is to say that if ${x(t)}$ is missing. predict using
+$x_{t-1}$ and other variables.
 
 Impute the missing values for one variable at a time. After that
 variable is imputed, use the updated data and move on to the next
